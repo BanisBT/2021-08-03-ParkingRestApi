@@ -12,7 +12,7 @@
     <artifactId>parkingRestApi</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>parkingRestApi</name>
-    <description>Demo project for Spring Boot</description>
+    <description>TB Parking Rest Api</description>
     <properties>
         <java.version>11</java.version>
     </properties>

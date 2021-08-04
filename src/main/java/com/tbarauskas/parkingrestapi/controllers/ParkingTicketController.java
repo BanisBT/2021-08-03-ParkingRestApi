@@ -10,14 +10,15 @@ import com.tbarauskas.parkingrestapi.model.ParkingCityName;
 import com.tbarauskas.parkingrestapi.model.ParkingStatusName;
 import com.tbarauskas.parkingrestapi.model.ParkingZoneName;
 import com.tbarauskas.parkingrestapi.model.UserRoleName;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/tickets")
 public class ParkingTicketController {
@@ -38,5 +39,17 @@ public class ParkingTicketController {
     @GetMapping("/{id}")
     public ParkingTicket getTicket(@PathVariable Long id) {
         return new ParkingTicket(1L, user, city, zone, status, now, now, now, now.plusMinutes(60L), BigDecimal.ZERO);
+    }
+
+    @GetMapping
+    public List<ParkingTicket> getTickets() {
+        return Collections.singletonList(new ParkingTicket(1L, user, city, zone, status, now, now, now, now.plusMinutes(60L), BigDecimal.ZERO));
+    }
+
+    @PostMapping
+    public ParkingTicket createTicket(@RequestBody ParkingTicket ticket) {
+        ticket.setId(3L);
+        log.debug("ParkingTicket - {} has been successfully created", ticket);
+        return ticket;
     }
 }

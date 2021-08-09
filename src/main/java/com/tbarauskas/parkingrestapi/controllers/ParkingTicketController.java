@@ -11,6 +11,7 @@ import com.tbarauskas.parkingrestapi.model.ParkingStatusName;
 import com.tbarauskas.parkingrestapi.model.ParkingZoneName;
 import com.tbarauskas.parkingrestapi.model.UserRoleName;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -43,13 +44,27 @@ public class ParkingTicketController {
 
     @GetMapping
     public List<ParkingTicket> getTickets() {
-        return Collections.singletonList(new ParkingTicket(1L, user, city, zone, status, now, now, now, now.plusMinutes(60L), BigDecimal.ZERO));
+        return Collections.singletonList(
+                new ParkingTicket(1L, user, city, zone, status, now, now, now, now.plusMinutes(60L), BigDecimal.ZERO));
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ParkingTicket createTicket(@RequestBody ParkingTicket ticket) {
         ticket.setId(3L);
         log.debug("ParkingTicket - {} has been successfully created", ticket);
         return ticket;
+    }
+
+    @PutMapping("/{id}")
+    public ParkingTicket updateTicket(@PathVariable Long id, @RequestBody ParkingTicket ticket) {
+        log.debug("ParkingTicket - {} has been successfully created", ticket);
+        return ticket;
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTicket(@PathVariable Long id, @RequestBody ParkingTicket ticket) {
+        log.debug("ParkingTicket - {} has been successfully deleted", ticket);
     }
 }

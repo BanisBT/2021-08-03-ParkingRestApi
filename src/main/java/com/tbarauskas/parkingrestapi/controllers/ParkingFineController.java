@@ -11,6 +11,7 @@ import com.tbarauskas.parkingrestapi.model.ParkingStatusName;
 import com.tbarauskas.parkingrestapi.model.ParkingZoneName;
 import com.tbarauskas.parkingrestapi.model.UserRoleName;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -46,9 +47,23 @@ public class ParkingFineController {
         return Collections.singletonList(new ParkingFine(1L, user, city, zone, status, now, now, now, BigDecimal.ZERO));
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ParkingFine createFine(@RequestBody ParkingFine fine) {
         fine.setId(2L);
         log.debug("ParkingFine - {} has been successfully created", fine);
         return fine;
+    }
+
+    @PutMapping("/{id}")
+    public ParkingFine updateFine(@PathVariable Long id, @RequestBody ParkingFine fine) {
+        log.debug("ParkingFine - {} has been successfully updated", fine);
+        return fine;
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteFine(@PathVariable Long id, @RequestBody ParkingFine fine) {
+        log.debug("ParkingFine - {} has been successfully deleted", fine);
     }
 }

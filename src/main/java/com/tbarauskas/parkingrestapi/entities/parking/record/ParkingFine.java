@@ -1,28 +1,27 @@
 package com.tbarauskas.parkingrestapi.entities.parking.record;
 
-import com.tbarauskas.parkingrestapi.entities.parking.city.ParkingCity;
-import com.tbarauskas.parkingrestapi.entities.parking.status.ParkingRecordStatus;
-import com.tbarauskas.parkingrestapi.entities.parking.zone.ParkingZone;
-import com.tbarauskas.parkingrestapi.entities.user.User;
+import com.tbarauskas.parkingrestapi.entities.parking.record.ParkingRecord;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.Column;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class ParkingFine extends ParkingRecord{
+@Table(name = "parking_fine")
+public class ParkingFine extends ParkingRecord {
 
+    @Column(name = "fine_date_time")
     private LocalDateTime fineDateTime;
 
+    @Column(name = "fine_amount")
     private BigDecimal fineAmount;
 
-    public ParkingFine(Long id, User user, ParkingCity parkingCity, ParkingZone parkingZone, ParkingRecordStatus recordStatus, LocalDateTime created, LocalDateTime updated, LocalDateTime fineDateTime, BigDecimal fineAmount) {
-        super(id, user, parkingCity, parkingZone, recordStatus, created, updated);
-        this.fineDateTime = fineDateTime;
-        this.fineAmount = fineAmount;
+    public ParkingFine() {
     }
 }

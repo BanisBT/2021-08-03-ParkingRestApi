@@ -1,6 +1,6 @@
-package com.tbarauskas.parkingrestapi.entities.user;
+package com.tbarauskas.parkingrestapi.entity.parking.zone;
 
-import com.tbarauskas.parkingrestapi.model.UserRoleName;
+import com.tbarauskas.parkingrestapi.model.ParkingZoneName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class UserRole {
+public class ParkingZone {
 
     private Long id;
 
-    private UserRoleName userRole;
+    private ParkingZoneName zoneName;
 
     private LocalDateTime created;
 

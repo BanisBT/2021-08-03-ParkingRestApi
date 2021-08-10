@@ -1,4 +1,4 @@
-package com.tbarauskas.parkingrestapi.entities.user;
+package com.tbarauskas.parkingrestapi.entity.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

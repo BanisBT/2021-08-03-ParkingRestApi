@@ -19,8 +19,9 @@ CREATE TABLE parking_fine
 (
     id             BIGSERIAL PRIMARY KEY NOT NULL,
     fine_date_time DATE                  NOT NULL,
-    fine_amount    NUMERIC(6, 2)
-
+    fine_amount    NUMERIC(6, 2),
+    created        timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated        timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE parking_ticket
@@ -28,7 +29,9 @@ CREATE TABLE parking_ticket
     id            BIGSERIAL PRIMARY KEY NOT NULL,
     ticket_began  DATE                  NOT NULL,
     ticket_end    DATE,
-    ticket_amount NUMERIC
+    ticket_amount NUMERIC,
+    created       timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated       timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO user_table (username, password, name, surname, car_number, balance)

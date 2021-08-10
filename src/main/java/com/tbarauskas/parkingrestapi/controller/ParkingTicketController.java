@@ -1,7 +1,7 @@
-package com.tbarauskas.parkingrestapi.controllers;
+package com.tbarauskas.parkingrestapi.controller;
 
-import com.tbarauskas.parkingrestapi.entities.parking.record.ParkingTicket;
-import com.tbarauskas.parkingrestapi.services.ParkingTicketService;
+import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
+import com.tbarauskas.parkingrestapi.service.ParkingTicketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

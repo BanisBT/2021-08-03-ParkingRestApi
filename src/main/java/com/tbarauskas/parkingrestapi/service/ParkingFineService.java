@@ -1,7 +1,7 @@
-package com.tbarauskas.parkingrestapi.services;
+package com.tbarauskas.parkingrestapi.service;
 
-import com.tbarauskas.parkingrestapi.entities.parking.record.ParkingFine;
-import com.tbarauskas.parkingrestapi.repositories.ParkingFineRepository;
+import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
+import com.tbarauskas.parkingrestapi.repository.ParkingFineRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

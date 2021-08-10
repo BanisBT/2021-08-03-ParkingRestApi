@@ -1,7 +1,7 @@
-package com.tbarauskas.parkingrestapi.services;
+package com.tbarauskas.parkingrestapi.service;
 
-import com.tbarauskas.parkingrestapi.entities.user.User;
-import com.tbarauskas.parkingrestapi.repositories.UserRepository;
+import com.tbarauskas.parkingrestapi.entity.user.User;
+import com.tbarauskas.parkingrestapi.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

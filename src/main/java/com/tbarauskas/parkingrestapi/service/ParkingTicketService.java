@@ -1,7 +1,7 @@
-package com.tbarauskas.parkingrestapi.services;
+package com.tbarauskas.parkingrestapi.service;
 
-import com.tbarauskas.parkingrestapi.entities.parking.record.ParkingTicket;
-import com.tbarauskas.parkingrestapi.repositories.ParkingTicketRepository;
+import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
+import com.tbarauskas.parkingrestapi.repository.ParkingTicketRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class ParkingTicketService {
     }
 
     public ParkingTicket getTicket(Long id) {
-        return ticketRepository.getParkingTicketBy(id);
+        return ticketRepository.getParkingTicketById(id);
     }
 
     public List<ParkingTicket> getTickets() {

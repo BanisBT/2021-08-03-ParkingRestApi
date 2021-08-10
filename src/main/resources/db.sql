@@ -10,7 +10,7 @@ CREATE TABLE user_table
     name       VARCHAR(255)          NOT NULL,
     surname    VARCHAR(255)          NOT NULL,
     car_number VARCHAR(255)          NOT NULL,
-    balance    NUMERIC(10, 2)        NOT NULL,
+    balance    NUMERIC(10, 2),
     created    timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated    timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

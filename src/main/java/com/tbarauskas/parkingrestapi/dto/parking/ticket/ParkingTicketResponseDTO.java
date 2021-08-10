@@ -6,12 +6,14 @@ import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import lombok.Data;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
-public class CreateParkingTicketResponseDTO {
+public class ParkingTicketResponseDTO {
 
     private Long id;
 
@@ -31,7 +33,11 @@ public class CreateParkingTicketResponseDTO {
 
     private LocalDateTime ticketDateTime;
 
-    public CreateParkingTicketResponseDTO(ParkingTicket parkingTicket) {
+    private LocalDateTime created;
+
+    private LocalDateTime updated;
+
+    public ParkingTicketResponseDTO(ParkingTicket parkingTicket) {
         this.id = parkingTicket.getId();
         this.user = parkingTicket.getUser();
         this.parkingCity = parkingTicket.getParkingCity();
@@ -41,5 +47,7 @@ public class CreateParkingTicketResponseDTO {
         this.parkingEnd = parkingTicket.getParkingEnd();
         this.ticketAmount = parkingTicket.getTicketAmount();
         this.ticketDateTime = parkingTicket.getCreated();
+        this.created = parkingTicket.getCreated();
+        this.updated = parkingTicket.getUpdated();
     }
 }

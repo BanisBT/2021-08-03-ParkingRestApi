@@ -1,7 +1,7 @@
 package com.tbarauskas.parkingrestapi.entity.parking.record;
 
 import com.tbarauskas.parkingrestapi.dto.parking.ticket.CreateParkingTicketRequestDTO;
-import com.tbarauskas.parkingrestapi.dto.parking.ticket.CreateParkingTicketResponseDTO;
+import com.tbarauskas.parkingrestapi.dto.parking.ticket.UpdateParkingTicketRequestTDO;
 import com.tbarauskas.parkingrestapi.entity.parking.city.ParkingCity;
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
@@ -56,10 +56,19 @@ public class ParkingTicket {
     @Column(name = "updated")
     private LocalDateTime updated;
 
-    public ParkingTicket(CreateParkingTicketRequestDTO ticketRequestDTO) {
-        this.user = ticketRequestDTO.getUser();
-        this.parkingCity = ticketRequestDTO.getParkingCity();
-        this.parkingZone = ticketRequestDTO.getParkingZone();
-        this.parkingBegan = ticketRequestDTO.getParkingBegan();
+    public ParkingTicket(CreateParkingTicketRequestDTO createTicketRequestDTO) {
+        this.user = createTicketRequestDTO.getUser();
+        this.parkingCity = createTicketRequestDTO.getParkingCity();
+        this.parkingZone = createTicketRequestDTO.getParkingZone();
+        this.parkingBegan = createTicketRequestDTO.getParkingBegan();
+    }
+
+    public ParkingTicket(UpdateParkingTicketRequestTDO updateTicketRequestTDO) {
+        this.id = updateTicketRequestTDO.getId();
+        this.user = updateTicketRequestTDO.getUser();
+        this.parkingCity = updateTicketRequestTDO.getParkingCity();
+        this.parkingZone = updateTicketRequestTDO.getParkingZone();
+        this.parkingBegan = updateTicketRequestTDO.getParkingBegan();
+        this.parkingEnd = updateTicketRequestTDO.getParkingEnd();
     }
 }

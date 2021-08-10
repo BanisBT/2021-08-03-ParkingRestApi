@@ -6,12 +6,14 @@ import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import lombok.Data;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
-public class CreateParkingFineResponseDTO {
+public class ParkingFineResponseDTO {
 
     private Long id;
 
@@ -27,7 +29,11 @@ public class CreateParkingFineResponseDTO {
 
     private BigDecimal fineAmount;
 
-    public CreateParkingFineResponseDTO(ParkingFine parkingFine) {
+    private LocalDateTime created;
+
+    private LocalDateTime updated;
+
+    public ParkingFineResponseDTO(ParkingFine parkingFine) {
         this.id = parkingFine.getId();
         this.user = parkingFine.getUser();
         this.parkingCity = parkingFine.getParkingCity();
@@ -35,5 +41,7 @@ public class CreateParkingFineResponseDTO {
         this.recordStatus = parkingFine.getRecordStatus();
         this.fineDateTime = parkingFine.getFineDateTime();
         this.fineAmount = parkingFine.getFineAmount();
+        this.created = parkingFine.getCreated();
+        this.updated = parkingFine.getUpdated();
     }
 }

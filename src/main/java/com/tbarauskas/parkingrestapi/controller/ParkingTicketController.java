@@ -1,13 +1,15 @@
 package com.tbarauskas.parkingrestapi.controller;
 
 import com.tbarauskas.parkingrestapi.dto.parking.ticket.CreateParkingTicketRequestDTO;
-import com.tbarauskas.parkingrestapi.dto.parking.ticket.CreateParkingTicketResponseDTO;
+import com.tbarauskas.parkingrestapi.dto.parking.ticket.ParkingTicketResponseDTO;
+import com.tbarauskas.parkingrestapi.dto.parking.ticket.UpdateParkingTicketRequestTDO;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.service.ParkingTicketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -33,16 +35,17 @@ public class ParkingTicketController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateParkingTicketResponseDTO createTicket(@RequestBody CreateParkingTicketRequestDTO ticketRequestDTO) {
+    public ParkingTicketResponseDTO createTicket(@Valid @RequestBody CreateParkingTicketRequestDTO ticketRequestDTO) {
         ParkingTicket parkingTicket = ticketService.createTicket(new ParkingTicket(ticketRequestDTO));
         log.debug("ParkingTicket - {} has been successfully created", parkingTicket);
-        return new CreateParkingTicketResponseDTO(parkingTicket);
+        return new ParkingTicketResponseDTO(parkingTicket);
     }
 
     @PutMapping("/{id}")
-    public ParkingTicket updateTicket(@PathVariable Long id, @RequestBody ParkingTicket ticket) {
-        log.debug("ParkingTicket - {} has been successfully created", ticket);
-        return ticket;
+    public ParkingTicketResponseDTO updateTicket(@Valid @PathVariable Long id, @RequestBody UpdateParkingTicketRequestTDO ticketRequestTDO) {
+        ParkingTicket parkingTicket = ticketService.updateTicket(id, new ParkingTicket(ticketRequestTDO));
+        log.debug("ParkingTicket - {} has been successfully created", parkingTicket);
+        return new ParkingTicketResponseDTO(parkingTicket);
     }
 
     @DeleteMapping("/{id}")

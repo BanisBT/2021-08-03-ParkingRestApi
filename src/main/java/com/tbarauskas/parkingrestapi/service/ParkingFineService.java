@@ -15,7 +15,7 @@ public class ParkingFineService {
         this.fineRepository = fineRepository;
     }
 
-    public ParkingFine getParkingFine(Long id) {
+    public ParkingFine getFine(Long id) {
         return fineRepository.getParkingFineById(id);
     }
 
@@ -23,7 +23,17 @@ public class ParkingFineService {
         return fineRepository.findAll();
     }
 
-    public ParkingFine createParkingFine(ParkingFine parkingFine) {
+    public ParkingFine createFine(ParkingFine parkingFine) {
         return fineRepository.save(parkingFine);
+    }
+
+    public ParkingFine updateFine(Long id, ParkingFine updateParkingFine) {
+        ParkingFine parkingFine = fineRepository.getParkingFineById(updateParkingFine.getId());
+
+        if (parkingFine != null) {
+            updateParkingFine.setCreated(parkingFine.getCreated());
+            return fineRepository.save(updateParkingFine);
+        }
+        return null;
     }
 }

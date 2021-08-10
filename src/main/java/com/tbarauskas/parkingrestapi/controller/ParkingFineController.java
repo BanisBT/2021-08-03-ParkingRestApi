@@ -1,13 +1,15 @@
 package com.tbarauskas.parkingrestapi.controller;
 
 import com.tbarauskas.parkingrestapi.dto.parking.fine.CreateParkingFineRequestDTO;
-import com.tbarauskas.parkingrestapi.dto.parking.fine.CreateParkingFineResponseDTO;
+import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineResponseDTO;
+import com.tbarauskas.parkingrestapi.dto.parking.fine.UpdateParkingFineRequestDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.service.ParkingFineService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -23,7 +25,7 @@ public class ParkingFineController {
 
     @GetMapping("{id}")
     public ParkingFine getFine(@PathVariable Long id) {
-        return fineService.getParkingFine(id);
+        return fineService.getFine(id);
     }
 
     @GetMapping()
@@ -33,16 +35,17 @@ public class ParkingFineController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateParkingFineResponseDTO createFine(@RequestBody CreateParkingFineRequestDTO fineRequestDTO) {
-        ParkingFine parkingFine = fineService.createParkingFine(new ParkingFine(fineRequestDTO));
+    public ParkingFineResponseDTO createFine(@Valid @RequestBody CreateParkingFineRequestDTO fineRequestDTO) {
+        ParkingFine parkingFine = fineService.createFine(new ParkingFine(fineRequestDTO));
         log.debug("ParkingFine - {} has been successfully created", parkingFine);
-        return new CreateParkingFineResponseDTO(parkingFine);
+        return new ParkingFineResponseDTO(parkingFine);
     }
 
     @PutMapping("/{id}")
-    public ParkingFine updateFine(@PathVariable Long id, @RequestBody ParkingFine fine) {
-        log.debug("ParkingFine - {} has been successfully updated", fine);
-        return fine;
+    public ParkingFineResponseDTO updateFine(@Valid @PathVariable Long id, @RequestBody UpdateParkingFineRequestDTO updateFineDTO) {
+        ParkingFine parkingFine = fineService.updateFine(id, new ParkingFine(updateFineDTO));
+        log.debug("ParkingFine - {} has been successfully updated", parkingFine);
+        return new ParkingFineResponseDTO(parkingFine);
     }
 
     @DeleteMapping("/{id}")

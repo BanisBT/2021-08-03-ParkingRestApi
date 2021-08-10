@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
-public class CreateUserResponseDTO {
+public class UserResponseDTO {
 
     private Long id;
 
@@ -23,7 +23,11 @@ public class CreateUserResponseDTO {
 
     private LocalDateTime profileCreated;
 
-    public CreateUserResponseDTO(User user) {
+    private LocalDateTime created;
+
+    private LocalDateTime updated;
+
+    public UserResponseDTO(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.name = user.getName();
@@ -31,5 +35,7 @@ public class CreateUserResponseDTO {
         this.carNumber = user.getCarNumber();
         this.balance = user.getBalance();
         this.profileCreated = user.getCreated();
+        this.created = user.getCreated();
+        this.updated = user.getUpdated();
     }
 }

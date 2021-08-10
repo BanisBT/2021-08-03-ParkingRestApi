@@ -26,4 +26,14 @@ public class UserService {
     public User createUser(User user) {
         return userRepository.save(user);
     }
+
+    public User updateUser(Long id, User updateUser) {
+        User user = userRepository.getUserById(updateUser.getId());
+
+        if (user != null) {
+            updateUser.setCreated(user.getCreated());
+            return userRepository.save(updateUser);
+        }
+        return null;
+    }
 }

@@ -3,9 +3,13 @@ package com.tbarauskas.parkingrestapi.dto.user;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
-public class CreateUserRequestDTO {
+public class UpdateUserRequestDTO {
+
+    @NotNull
+    private Long id;
 
     @NotBlank
     private String username;

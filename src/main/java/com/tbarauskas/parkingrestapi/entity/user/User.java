@@ -1,6 +1,7 @@
 package com.tbarauskas.parkingrestapi.entity.user;
 
 import com.tbarauskas.parkingrestapi.dto.user.CreateUserRequestDTO;
+import com.tbarauskas.parkingrestapi.dto.user.UpdateUserRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -51,11 +52,20 @@ public class User {
     @Column(name = "updated")
     private LocalDateTime updated;
 
-    public User(CreateUserRequestDTO createUserRequestDTO) {
-        this.username = createUserRequestDTO.getUsername();
-        this.password = createUserRequestDTO.getPassword();
-        this.name = createUserRequestDTO.getName();
-        this.surname = createUserRequestDTO.getSurname();
-        this.carNumber = createUserRequestDTO.getCarNumber();
+    public User(CreateUserRequestDTO createUserDTO) {
+        this.username = createUserDTO.getUsername();
+        this.password = createUserDTO.getPassword();
+        this.name = createUserDTO.getName();
+        this.surname = createUserDTO.getSurname();
+        this.carNumber = createUserDTO.getCarNumber();
+    }
+
+    public User(UpdateUserRequestDTO updateUserDTO) {
+        this.id = updateUserDTO.getId();
+        this.username = updateUserDTO.getUsername();
+        this.password = updateUserDTO.getPassword();
+        this.name = updateUserDTO.getName();
+        this.surname = updateUserDTO.getSurname();
+        this.carNumber = updateUserDTO.getCarNumber();
     }
 }

@@ -1,13 +1,14 @@
 package com.tbarauskas.parkingrestapi.controller;
 
 import com.tbarauskas.parkingrestapi.dto.user.CreateUserRequestDTO;
-import com.tbarauskas.parkingrestapi.dto.user.CreateUserResponseDTO;
+import com.tbarauskas.parkingrestapi.dto.user.UserResponseDTO;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -33,15 +34,16 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateUserResponseDTO createUser(@RequestBody CreateUserRequestDTO createUserRequestDTO) {
+    public UserResponseDTO createUser(@Valid @RequestBody CreateUserRequestDTO createUserRequestDTO) {
         User user = userService.createUser(new User(createUserRequestDTO));
         log.debug("User - {} has been successfully created", user);
-        return new CreateUserResponseDTO(user);
+        return new UserResponseDTO(user);
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
+    public UserResponseDTO updateUser(@PathVariable Long id, @RequestBody CreateUserRequestDTO createUserRequestDTO) {
+        User user = userService.updateUser(id, new User(createUserRequestDTO));
         log.debug("User - {} has been successfully updated", user);
-        return user;
+        return new UserResponseDTO(user);
     }
 }

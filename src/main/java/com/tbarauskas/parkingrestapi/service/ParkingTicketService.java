@@ -26,4 +26,14 @@ public class ParkingTicketService {
     public ParkingTicket createTicket(ParkingTicket parkingTicket) {
         return ticketRepository.save(parkingTicket);
     }
+
+    public ParkingTicket updateTicket(Long id, ParkingTicket updateParkingTicket) {
+        ParkingTicket parkingTicket = ticketRepository.getParkingTicketById(updateParkingTicket.getId());
+
+        if (parkingTicket != null) {
+            updateParkingTicket.setCreated(parkingTicket.getCreated());
+            return ticketRepository.save(updateParkingTicket);
+        }
+        return null;
+    }
 }

@@ -50,7 +50,8 @@ public class ParkingTicketController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTicket(@PathVariable Long id, @RequestBody ParkingTicket ticket) {
-        log.debug("ParkingTicket - {} has been successfully deleted", ticket);
+    public void deleteTicket(@PathVariable Long id) {
+        log.debug("ParkingTicket - {} has been successfully deleted", ticketService.getTicket(id));
+        ticketService.deleteTicket(id);
     }
 }

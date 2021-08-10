@@ -50,7 +50,8 @@ public class ParkingFineController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteFine(@PathVariable Long id, @RequestBody ParkingFine fine) {
-        log.debug("ParkingFine - {} has been successfully deleted", fine);
+    public void deleteFine(@PathVariable Long id) {
+        log.debug("ParkingFine - {} has been successfully deleted", fineService.getFine(id));
+        fineService.deleteFine(id);
     }
 }

@@ -36,4 +36,10 @@ public class ParkingFineService {
         }
         return null;
     }
+
+    public void deleteFine(Long id) {
+        if (getFine(id) != null) {
+            fineRepository.deleteById(id);
+        }
+    }
 }

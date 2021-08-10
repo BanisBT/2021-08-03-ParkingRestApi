@@ -46,4 +46,11 @@ public class UserController {
         log.debug("User - {} has been successfully updated", user);
         return new UserResponseDTO(user);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable Long id) {
+        log.debug("User - {} has been successfully deleted", userService.getUser(id));
+        userService.deleteUser(id);
+    }
 }

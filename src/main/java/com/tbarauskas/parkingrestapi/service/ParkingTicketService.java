@@ -36,4 +36,10 @@ public class ParkingTicketService {
         }
         return null;
     }
+
+    public void deleteTicket(Long id) {
+        if (getTicket(id) != null) {
+            ticketRepository.deleteById(id);
+        }
+    }
 }

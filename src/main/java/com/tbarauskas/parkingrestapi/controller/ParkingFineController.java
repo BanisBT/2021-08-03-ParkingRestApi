@@ -1,5 +1,7 @@
 package com.tbarauskas.parkingrestapi.controller;
 
+import com.tbarauskas.parkingrestapi.dto.parking.fine.CreateParkingFineRequestDTO;
+import com.tbarauskas.parkingrestapi.dto.parking.fine.CreateParkingFineResponseDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.service.ParkingFineService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,10 +33,10 @@ public class ParkingFineController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ParkingFine createFine(@RequestBody ParkingFine fine) {
-        fine.setId(2L);
-        log.debug("ParkingFine - {} has been successfully created", fine);
-        return fine;
+    public CreateParkingFineResponseDTO createFine(@RequestBody CreateParkingFineRequestDTO fineRequestDTO) {
+        ParkingFine parkingFine = fineService.createParkingFine(new ParkingFine(fineRequestDTO));
+        log.debug("ParkingFine - {} has been successfully created", parkingFine);
+        return new CreateParkingFineResponseDTO(parkingFine);
     }
 
     @PutMapping("/{id}")

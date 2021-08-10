@@ -22,4 +22,8 @@ public class ParkingTicketService {
     public List<ParkingTicket> getTickets() {
         return ticketRepository.findAll();
     }
+
+    public ParkingTicket createTicket(ParkingTicket parkingTicket) {
+        return ticketRepository.save(parkingTicket);
+    }
 }

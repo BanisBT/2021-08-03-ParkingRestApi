@@ -1,5 +1,7 @@
 package com.tbarauskas.parkingrestapi.controller;
 
+import com.tbarauskas.parkingrestapi.dto.user.CreateUserRequestDTO;
+import com.tbarauskas.parkingrestapi.dto.user.CreateUserResponseDTO;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,10 +33,10 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@RequestBody User user) {
-        user.setId(1L);
+    public CreateUserResponseDTO createUser(@RequestBody CreateUserRequestDTO createUserRequestDTO) {
+        User user = userService.createUser(new User(createUserRequestDTO));
         log.debug("User - {} has been successfully created", user);
-        return user;
+        return new CreateUserResponseDTO(user);
     }
 
     @PutMapping("/{id}")

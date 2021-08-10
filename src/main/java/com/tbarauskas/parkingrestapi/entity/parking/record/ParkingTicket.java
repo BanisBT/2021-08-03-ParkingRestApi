@@ -1,5 +1,7 @@
 package com.tbarauskas.parkingrestapi.entity.parking.record;
 
+import com.tbarauskas.parkingrestapi.dto.parking.ticket.CreateParkingTicketRequestDTO;
+import com.tbarauskas.parkingrestapi.dto.parking.ticket.CreateParkingTicketResponseDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.city.ParkingCity;
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
@@ -37,12 +39,6 @@ public class ParkingTicket {
     @Transient
     private ParkingRecordStatus recordStatus;
 
-    @CreationTimestamp
-    private LocalDateTime created;
-
-    @UpdateTimestamp
-    private LocalDateTime updated;
-
     @Column(name = "ticket_began")
     private LocalDateTime parkingBegan;
 
@@ -51,4 +47,19 @@ public class ParkingTicket {
 
     @Column(name = "ticket_amount")
     private BigDecimal ticketAmount;
+
+    @CreationTimestamp
+    @Column(name = "created")
+    private LocalDateTime created;
+
+    @UpdateTimestamp
+    @Column(name = "updated")
+    private LocalDateTime updated;
+
+    public ParkingTicket(CreateParkingTicketRequestDTO ticketRequestDTO) {
+        this.user = ticketRequestDTO.getUser();
+        this.parkingCity = ticketRequestDTO.getParkingCity();
+        this.parkingZone = ticketRequestDTO.getParkingZone();
+        this.parkingBegan = ticketRequestDTO.getParkingBegan();
+    }
 }

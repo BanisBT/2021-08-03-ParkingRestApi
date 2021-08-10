@@ -1,5 +1,7 @@
 package com.tbarauskas.parkingrestapi.controller;
 
+import com.tbarauskas.parkingrestapi.dto.parking.ticket.CreateParkingTicketRequestDTO;
+import com.tbarauskas.parkingrestapi.dto.parking.ticket.CreateParkingTicketResponseDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.service.ParkingTicketService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,10 +33,10 @@ public class ParkingTicketController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ParkingTicket createTicket(@RequestBody ParkingTicket ticket) {
-        ticket.setId(3L);
-        log.debug("ParkingTicket - {} has been successfully created", ticket);
-        return ticket;
+    public CreateParkingTicketResponseDTO createTicket(@RequestBody CreateParkingTicketRequestDTO ticketRequestDTO) {
+        ParkingTicket parkingTicket = ticketService.createTicket(new ParkingTicket(ticketRequestDTO));
+        log.debug("ParkingTicket - {} has been successfully created", parkingTicket);
+        return new CreateParkingTicketResponseDTO(parkingTicket);
     }
 
     @PutMapping("/{id}")

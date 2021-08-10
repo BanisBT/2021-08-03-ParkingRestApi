@@ -22,4 +22,8 @@ public class ParkingFineService {
     public List<ParkingFine> getFines() {
         return fineRepository.findAll();
     }
+
+    public ParkingFine createParkingFine(ParkingFine parkingFine) {
+        return fineRepository.save(parkingFine);
+    }
 }

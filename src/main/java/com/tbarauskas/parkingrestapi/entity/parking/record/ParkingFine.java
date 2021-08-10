@@ -1,5 +1,6 @@
 package com.tbarauskas.parkingrestapi.entity.parking.record;
 
+import com.tbarauskas.parkingrestapi.dto.parking.fine.CreateParkingFineRequestDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.city.ParkingCity;
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
@@ -37,16 +38,24 @@ public class ParkingFine {
     @Transient
     private ParkingRecordStatus recordStatus;
 
-    @CreationTimestamp
-    private LocalDateTime created;
-
-    @UpdateTimestamp
-    private LocalDateTime updated;
-
     @Column(name = "fine_date_time")
     private LocalDateTime fineDateTime;
 
     @Column(name = "fine_amount")
     private BigDecimal fineAmount;
 
+    @CreationTimestamp
+    @Column(name = "created")
+    private LocalDateTime created;
+
+    @UpdateTimestamp
+    @Column(name = "updated")
+    private LocalDateTime updated;
+
+    public ParkingFine(CreateParkingFineRequestDTO fineDTO) {
+        this.user = fineDTO.getUser();
+        this.parkingCity = fineDTO.getParkingCity();
+        this.parkingZone = fineDTO.getParkingZone();
+        this.fineDateTime = fineDTO.getFineDateTime();
+    }
 }

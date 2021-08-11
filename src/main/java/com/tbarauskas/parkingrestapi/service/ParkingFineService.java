@@ -1,6 +1,7 @@
 package com.tbarauskas.parkingrestapi.service;
 
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
+import com.tbarauskas.parkingrestapi.excepsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.repository.ParkingFineRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class ParkingFineService {
     }
 
     public ParkingFine getFine(Long id) {
-        return fineRepository.getParkingFineById(id);
+        return fineRepository.getParkingFineById(id).orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     public List<ParkingFine> getFines(LocalDateTime dateFrom, LocalDateTime dateTo) {
@@ -36,7 +37,7 @@ public class ParkingFineService {
     }
 
     public ParkingFine updateFine(Long id, ParkingFine updateParkingFine) {
-        ParkingFine parkingFine = fineRepository.getParkingFineById(updateParkingFine.getId());
+        ParkingFine parkingFine = getFine(updateParkingFine.getId());
 
         if (parkingFine != null) {
             updateParkingFine.setCreated(parkingFine.getCreated());

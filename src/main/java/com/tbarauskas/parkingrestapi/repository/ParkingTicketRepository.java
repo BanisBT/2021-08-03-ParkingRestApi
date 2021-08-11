@@ -7,11 +7,12 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ParkingTicketRepository extends JpaRepository<ParkingTicket, Long> {
 
-    ParkingTicket getParkingTicketById(Long id);
+    Optional<ParkingTicket> getParkingTicketById(Long id);
 
     List<ParkingTicket> getParkingTicketsByParkingBeganAfter(LocalDateTime dateFrom);
 

@@ -28,8 +28,8 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getUsers() {
-        return userService.getUsers();
+    public List<User> getUsers(@RequestParam(required = false, value = "search") String search) {
+        return userService.getUsers(search);
     }
 
     @PostMapping

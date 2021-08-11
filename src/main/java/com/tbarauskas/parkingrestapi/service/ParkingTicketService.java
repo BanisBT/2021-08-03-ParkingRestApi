@@ -1,6 +1,7 @@
 package com.tbarauskas.parkingrestapi.service;
 
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
+import com.tbarauskas.parkingrestapi.excepsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.repository.ParkingTicketRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class ParkingTicketService {
     }
 
     public ParkingTicket getTicket(Long id) {
-        return ticketRepository.getParkingTicketById(id);
+        return ticketRepository.getParkingTicketById(id).orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     public List<ParkingTicket> getTickets(LocalDateTime dateFrom, LocalDateTime dateTo) {
@@ -36,7 +37,7 @@ public class ParkingTicketService {
     }
 
     public ParkingTicket updateTicket(Long id, ParkingTicket updateParkingTicket) {
-        ParkingTicket parkingTicket = ticketRepository.getParkingTicketById(updateParkingTicket.getId());
+        ParkingTicket parkingTicket = getTicket(updateParkingTicket.getId());
 
         if (parkingTicket != null) {
             updateParkingTicket.setCreated(parkingTicket.getCreated());

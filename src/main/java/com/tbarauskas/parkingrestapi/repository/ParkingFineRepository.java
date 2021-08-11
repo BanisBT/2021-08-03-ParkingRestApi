@@ -6,11 +6,12 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ParkingFineRepository extends JpaRepository<ParkingFine,Long> {
 
-    ParkingFine getParkingFineById(Long id);
+    Optional<ParkingFine> getParkingFineById(Long id);
 
     List<ParkingFine> getParkingFinesByFineDateTimeAfter(LocalDateTime dateFrom);
 

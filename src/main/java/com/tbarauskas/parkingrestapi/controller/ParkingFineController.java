@@ -4,6 +4,7 @@ import com.tbarauskas.parkingrestapi.dto.parking.fine.CreateParkingFineRequestDT
 import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineResponseDTO;
 import com.tbarauskas.parkingrestapi.dto.parking.fine.UpdateParkingFineRequestDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
+import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.service.ParkingFineService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,6 +29,11 @@ public class ParkingFineController {
     @GetMapping("{id}")
     public ParkingFine getFine(@PathVariable Long id) {
         return fineService.getFine(id);
+    }
+
+    @GetMapping("{id}/user")
+    public User getFinesUser(@PathVariable Long id) {
+        return fineService.getFinesUser(id);
     }
 
     @GetMapping()

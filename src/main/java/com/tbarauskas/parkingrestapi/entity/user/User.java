@@ -1,7 +1,10 @@
 package com.tbarauskas.parkingrestapi.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tbarauskas.parkingrestapi.dto.user.CreateUserRequestDTO;
 import com.tbarauskas.parkingrestapi.dto.user.UpdateUserRequestDTO;
+import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
+import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +14,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -43,6 +47,14 @@ public class User {
 
     @Transient
     private UserRole role;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<ParkingTicket> tickets;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<ParkingFine> fines;
 
     @CreationTimestamp
     @Column(name = "created")

@@ -2,6 +2,8 @@ package com.tbarauskas.parkingrestapi.controller;
 
 import com.tbarauskas.parkingrestapi.dto.user.CreateUserRequestDTO;
 import com.tbarauskas.parkingrestapi.dto.user.UserResponseDTO;
+import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
+import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,16 @@ public class UserController {
     @GetMapping
     public List<User> getUsers(@RequestParam(required = false, value = "search") String search) {
         return userService.getUsers(search);
+    }
+
+    @GetMapping("/{id}/tickets")
+    public List<ParkingTicket> getUsersTickets(@PathVariable Long id) {
+        return userService.getUsersTickets(id);
+    }
+
+    @GetMapping("/{id}/fines")
+    public List<ParkingFine> getUsersFines(@PathVariable Long id) {
+        return userService.getUsersFines(id);
     }
 
     @PostMapping

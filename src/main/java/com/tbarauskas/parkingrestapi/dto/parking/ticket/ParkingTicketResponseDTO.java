@@ -1,14 +1,13 @@
 package com.tbarauskas.parkingrestapi.dto.parking.ticket;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tbarauskas.parkingrestapi.entity.parking.city.ParkingCity;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import lombok.Data;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -25,16 +24,21 @@ public class ParkingTicketResponseDTO {
 
     private ParkingRecordStatus recordStatus;
 
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime parkingBegan;
 
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime parkingEnd;
 
     private BigDecimal ticketAmount;
 
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime ticketDateTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime created;
 
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime updated;
 
     public ParkingTicketResponseDTO(ParkingTicket parkingTicket) {

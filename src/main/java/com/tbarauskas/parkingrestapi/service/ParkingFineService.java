@@ -1,6 +1,7 @@
 package com.tbarauskas.parkingrestapi.service;
 
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
+import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.excepsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.repository.ParkingFineRepository;
 import org.springframework.stereotype.Service;
@@ -38,17 +39,15 @@ public class ParkingFineService {
 
     public ParkingFine updateFine(Long id, ParkingFine updateParkingFine) {
         ParkingFine parkingFine = getFine(updateParkingFine.getId());
-
-        if (parkingFine != null) {
-            updateParkingFine.setCreated(parkingFine.getCreated());
-            return fineRepository.save(updateParkingFine);
-        }
-        return null;
+        updateParkingFine.setCreated(parkingFine.getCreated());
+        return fineRepository.save(updateParkingFine);
     }
 
     public void deleteFine(Long id) {
-        if (getFine(id) != null) {
-            fineRepository.deleteById(id);
-        }
+        fineRepository.deleteById(getFine(id).getId());
+    }
+
+    public User getFinesUser(Long id) {
+        return getFine(id).getUser();
     }
 }

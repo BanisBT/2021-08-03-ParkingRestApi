@@ -1,5 +1,6 @@
 package com.tbarauskas.parkingrestapi.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import lombok.Data;
 
@@ -21,10 +22,13 @@ public class UserResponseDTO {
 
     private BigDecimal balance;
 
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime profileCreated;
 
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime created;
 
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime updated;
 
     public UserResponseDTO(User user) {

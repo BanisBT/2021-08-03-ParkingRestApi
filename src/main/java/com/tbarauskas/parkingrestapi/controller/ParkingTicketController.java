@@ -4,6 +4,7 @@ import com.tbarauskas.parkingrestapi.dto.parking.ticket.CreateParkingTicketReque
 import com.tbarauskas.parkingrestapi.dto.parking.ticket.ParkingTicketResponseDTO;
 import com.tbarauskas.parkingrestapi.dto.parking.ticket.UpdateParkingTicketRequestTDO;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
+import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.service.ParkingTicketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -29,6 +30,11 @@ public class ParkingTicketController {
     @GetMapping("/{id}")
     public ParkingTicket getTicket(@PathVariable Long id) {
         return ticketService.getTicket(id);
+    }
+
+    @GetMapping("/{id}/user")
+    public User getTicketsUser(@PathVariable Long id) {
+        return ticketService.getTicketsUser(id);
     }
 
     @GetMapping

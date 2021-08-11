@@ -1,5 +1,6 @@
 package com.tbarauskas.parkingrestapi.dto.parking.fine;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tbarauskas.parkingrestapi.entity.parking.city.ParkingCity;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
@@ -25,12 +26,15 @@ public class ParkingFineResponseDTO {
 
     private ParkingRecordStatus recordStatus;
 
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime fineDateTime;
 
     private BigDecimal fineAmount;
 
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime created;
 
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime updated;
 
     public ParkingFineResponseDTO(ParkingFine parkingFine) {

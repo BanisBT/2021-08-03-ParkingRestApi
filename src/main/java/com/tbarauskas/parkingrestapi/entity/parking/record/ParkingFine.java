@@ -27,7 +27,8 @@ public class ParkingFine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Transient
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Transient

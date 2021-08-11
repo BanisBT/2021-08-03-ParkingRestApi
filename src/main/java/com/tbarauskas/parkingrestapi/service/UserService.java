@@ -1,5 +1,7 @@
 package com.tbarauskas.parkingrestapi.service;
 
+import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
+import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.excepsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.repository.UserRepository;
@@ -33,17 +35,19 @@ public class UserService {
 
     public User updateUser(Long id, User updateUser) {
         User user = getUser(updateUser.getId());
-
-        if (user != null) {
-            updateUser.setCreated(user.getCreated());
-            return userRepository.save(updateUser);
-        }
-        return null;
+        updateUser.setCreated(user.getCreated());
+        return userRepository.save(updateUser);
     }
 
     public void deleteUser(Long id) {
-        if (getUser(id) != null) {
-            userRepository.deleteById(id);
-        }
+        userRepository.deleteById(getUser(id).getId());
+    }
+
+    public List<ParkingFine> getUsersFines(Long id) {
+        return getUser(id).getFines();
+    }
+
+    public List<ParkingTicket> getUsersTickets(Long id) {
+        return getUser(id).getTickets();
     }
 }

@@ -14,7 +14,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Error> exceptionHandle(ResourceNotFoundException e) {
-        log.debug("Resource with id - {} was not found. Message = {}", e.getId(), e.getMessage());
+        log.debug("Resource with id - {} was not found", e.getId());
         return new ResponseEntity<>(new Error(HttpStatus.NOT_FOUND.value(),
                 String.format("Resource with id %d - was not found", e.getId())), HttpStatus.NOT_FOUND);
     }

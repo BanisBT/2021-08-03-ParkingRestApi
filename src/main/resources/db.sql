@@ -18,7 +18,7 @@ CREATE TABLE user_table
 CREATE TABLE parking_fine
 (
     id             BIGSERIAL PRIMARY KEY NOT NULL,
-    fine_date_time DATE                  NOT NULL,
+    fine_date_time TIMESTAMP             NOT NULL,
     fine_amount    NUMERIC(6, 2),
     created        timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated        timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -27,8 +27,8 @@ CREATE TABLE parking_fine
 CREATE TABLE parking_ticket
 (
     id            BIGSERIAL PRIMARY KEY NOT NULL,
-    ticket_began  DATE                  NOT NULL,
-    ticket_end    DATE,
+    ticket_began  TIMESTAMP             NOT NULL,
+    ticket_end    TIMESTAMP,
     ticket_amount NUMERIC,
     created       timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated       timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -46,4 +46,5 @@ VALUES ('2021-04-05 10:30:00', 100),
 
 INSERT INTO parking_ticket(ticket_began, ticket_end, ticket_amount)
 VALUES ('2021-04-05 10:30:00', '2021-04-05 12:30:00', 10),
-       ('2021-04-06 08:30:00', '2021-04-06 10:30:00', 20);
+       ('2021-04-06 08:30:00', '2021-04-06 10:30:00', 20),
+       ('2021-04-10 08:30:00', '2021-04-06 10:30:00', 20);

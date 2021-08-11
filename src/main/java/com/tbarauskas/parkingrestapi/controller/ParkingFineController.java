@@ -6,10 +6,12 @@ import com.tbarauskas.parkingrestapi.dto.parking.fine.UpdateParkingFineRequestDT
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.service.ParkingFineService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -29,8 +31,11 @@ public class ParkingFineController {
     }
 
     @GetMapping()
-    public List<ParkingFine> getFines() {
-        return fineService.getFines();
+    public List<ParkingFine> getFines(@RequestParam(required = false, value = "from")
+                                      @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime dateFrom,
+                                      @RequestParam(required = false, value = "to")
+                                      @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime dateTo) {
+        return fineService.getFines(dateFrom, dateTo);
     }
 
     @PostMapping

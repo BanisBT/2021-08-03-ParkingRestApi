@@ -4,6 +4,7 @@ import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.repository.ParkingFineRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,8 +20,15 @@ public class ParkingFineService {
         return fineRepository.getParkingFineById(id);
     }
 
-    public List<ParkingFine> getFines() {
-        return fineRepository.findAll();
+    public List<ParkingFine> getFines(LocalDateTime dateFrom, LocalDateTime dateTo) {
+        if (dateFrom == null && dateTo == null) {
+            return fineRepository.findAll();
+        } else if (dateFrom == null) {
+            return fineRepository.getParkingFinesByFineDateTimeBefore(dateTo);
+        } else if (dateTo == null) {
+            return fineRepository.getParkingFinesByFineDateTimeAfter(dateFrom);
+        }
+        return fineRepository.getParkingFinesByFineDateTimeBetween(dateFrom, dateTo);
     }
 
     public ParkingFine createFine(ParkingFine parkingFine) {

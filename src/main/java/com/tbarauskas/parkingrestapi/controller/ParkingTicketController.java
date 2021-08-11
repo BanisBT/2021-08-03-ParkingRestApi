@@ -6,10 +6,13 @@ import com.tbarauskas.parkingrestapi.dto.parking.ticket.UpdateParkingTicketReque
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.service.ParkingTicketService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -29,8 +32,11 @@ public class ParkingTicketController {
     }
 
     @GetMapping
-    public List<ParkingTicket> getTickets() {
-        return ticketService.getTickets();
+    public List<ParkingTicket> getTickets(@RequestParam(required = false, value = "from")
+                                          @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime dateFrom,
+                                          @RequestParam(required = false, value = "to")
+                                          @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime dateTo) {
+        return ticketService.getTickets(dateFrom, dateTo);
     }
 
     @PostMapping
@@ -42,7 +48,8 @@ public class ParkingTicketController {
     }
 
     @PutMapping("/{id}")
-    public ParkingTicketResponseDTO updateTicket(@Valid @PathVariable Long id, @RequestBody UpdateParkingTicketRequestTDO ticketRequestTDO) {
+    public ParkingTicketResponseDTO updateTicket(@Valid @PathVariable Long id,
+                                                 @RequestBody UpdateParkingTicketRequestTDO ticketRequestTDO) {
         ParkingTicket parkingTicket = ticketService.updateTicket(id, new ParkingTicket(ticketRequestTDO));
         log.debug("ParkingTicket - {} has been successfully created", parkingTicket);
         return new ParkingTicketResponseDTO(parkingTicket);

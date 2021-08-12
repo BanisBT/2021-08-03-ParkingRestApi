@@ -11,15 +11,15 @@ import java.time.LocalDateTime;
 @Data
 public class CreateParkingTicketRequestDTO {
 
-    @NotEmpty
+//    @NotEmpty
     private User user;
 
-    @NotEmpty
+//    @NotEmpty
     private ParkingCity parkingCity;
 
-    @NotEmpty
+//    @NotEmpty
     private ParkingZone parkingZone;
 
-    @NotEmpty
+//    @NotEmpty
     private LocalDateTime parkingBegan;
 }

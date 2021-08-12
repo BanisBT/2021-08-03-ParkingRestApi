@@ -1,20 +1,31 @@
 package com.tbarauskas.parkingrestapi.entity.parking.status;
 
-import com.tbarauskas.parkingrestapi.model.ParkingStatusName;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
+@Entity
+@NoArgsConstructor
+@Table(name = "parking_record_status")
 public class ParkingRecordStatus {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private ParkingStatusName parkingStatus;
+    @Column(name = "parking_status")
+    private String parkingStatus;
 
+    @Column(name = "created")
+    @CreationTimestamp
     private LocalDateTime created;
 
+    @Column(name = "updated")
+    @UpdateTimestamp
     private LocalDateTime updated;
 }

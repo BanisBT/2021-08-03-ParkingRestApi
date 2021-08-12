@@ -3,13 +3,10 @@ package com.tbarauskas.parkingrestapi.dto.parking.fine;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tbarauskas.parkingrestapi.entity.parking.city.ParkingCity;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
-import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import lombok.Data;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -24,7 +21,7 @@ public class ParkingFineResponseDTO {
 
     private ParkingZone parkingZone;
 
-    private ParkingRecordStatus recordStatus;
+    private String recordStatus;
 
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime fineDateTime;
@@ -42,7 +39,7 @@ public class ParkingFineResponseDTO {
         this.user = parkingFine.getUser();
         this.parkingCity = parkingFine.getParkingCity();
         this.parkingZone = parkingFine.getParkingZone();
-        this.recordStatus = parkingFine.getRecordStatus();
+        this.recordStatus = parkingFine.getRecordStatus().getParkingStatus();
         this.fineDateTime = parkingFine.getFineDateTime();
         this.fineAmount = parkingFine.getFineAmount();
         this.created = parkingFine.getCreated();

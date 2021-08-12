@@ -37,7 +37,8 @@ public class ParkingTicket {
     @Transient
     private ParkingZone parkingZone;
 
-    @Transient
+    @ManyToOne
+    @JoinColumn(name = "parking_status")
     private ParkingRecordStatus recordStatus;
 
     @Column(name = "ticket_began")

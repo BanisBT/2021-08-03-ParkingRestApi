@@ -26,6 +26,13 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(RecordStatusNotFoundException.class)
+    public ResponseEntity<Error> exceptionHandle(RecordStatusNotFoundException e) {
+        log.error("Record status not found - {}", e.getName());
+        return new ResponseEntity<>(new Error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Server error"),
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Error> exceptionHandle(Exception e) {
         log.error("Unexpected error - {}", e.getMessage());

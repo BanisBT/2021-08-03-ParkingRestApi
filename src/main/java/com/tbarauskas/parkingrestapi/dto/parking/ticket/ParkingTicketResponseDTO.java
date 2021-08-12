@@ -3,7 +3,6 @@ package com.tbarauskas.parkingrestapi.dto.parking.ticket;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tbarauskas.parkingrestapi.entity.parking.city.ParkingCity;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
-import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import lombok.Data;
@@ -22,7 +21,7 @@ public class ParkingTicketResponseDTO {
 
     private ParkingZone parkingZone;
 
-    private ParkingRecordStatus recordStatus;
+    private String recordStatus;
 
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime parkingBegan;
@@ -46,7 +45,7 @@ public class ParkingTicketResponseDTO {
         this.user = parkingTicket.getUser();
         this.parkingCity = parkingTicket.getParkingCity();
         this.parkingZone = parkingTicket.getParkingZone();
-        this.recordStatus = parkingTicket.getRecordStatus();
+        this.recordStatus = parkingTicket.getRecordStatus().getParkingStatus();
         this.parkingBegan = parkingTicket.getParkingBegan();
         this.parkingEnd = parkingTicket.getParkingEnd();
         this.ticketAmount = parkingTicket.getTicketAmount();

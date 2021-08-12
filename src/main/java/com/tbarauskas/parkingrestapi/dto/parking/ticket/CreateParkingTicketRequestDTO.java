@@ -19,7 +19,4 @@ public class CreateParkingTicketRequestDTO {
 
 //    @NotEmpty
     private ParkingZone parkingZone;
-
-//    @NotEmpty
-    private LocalDateTime parkingBegan;
 }

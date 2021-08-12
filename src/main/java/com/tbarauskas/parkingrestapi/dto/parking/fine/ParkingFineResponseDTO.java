@@ -39,7 +39,7 @@ public class ParkingFineResponseDTO {
         this.user = parkingFine.getUser();
         this.parkingCity = parkingFine.getParkingCity();
         this.parkingZone = parkingFine.getParkingZone();
-        this.recordStatus = parkingFine.getRecordStatus().getParkingStatus();
+        this.recordStatus = parkingFine.getRecordStatus().getParkingStatusName();
         this.fineDateTime = parkingFine.getFineDateTime();
         this.fineAmount = parkingFine.getFineAmount();
         this.created = parkingFine.getCreated();

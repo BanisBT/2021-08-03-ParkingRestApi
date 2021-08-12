@@ -62,7 +62,7 @@ public class ParkingTicket {
         this.user = createTicketRequestDTO.getUser();
         this.parkingCity = createTicketRequestDTO.getParkingCity();
         this.parkingZone = createTicketRequestDTO.getParkingZone();
-        this.parkingBegan = createTicketRequestDTO.getParkingBegan();
+        this.parkingBegan = LocalDateTime.now();
     }
 
     public ParkingTicket(UpdateParkingTicketRequestTDO updateTicketRequestTDO) {

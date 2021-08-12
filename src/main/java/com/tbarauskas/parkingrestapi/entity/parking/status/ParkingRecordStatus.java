@@ -19,7 +19,7 @@ public class ParkingRecordStatus {
     private Long id;
 
     @Column(name = "parking_status")
-    private String parkingStatus;
+    private String parkingStatusName;
 
     @Column(name = "created")
     @CreationTimestamp

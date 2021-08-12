@@ -1,5 +1,6 @@
 package com.tbarauskas.parkingrestapi.dto.parking.fine;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tbarauskas.parkingrestapi.entity.parking.city.ParkingCity;
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
 import com.tbarauskas.parkingrestapi.entity.user.User;
@@ -21,5 +22,6 @@ public class CreateParkingFineRequestDTO {
     private ParkingZone parkingZone;
 
     @NotEmpty
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime fineDateTime;
 }

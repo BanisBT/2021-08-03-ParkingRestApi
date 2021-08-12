@@ -45,7 +45,7 @@ public class ParkingTicketResponseDTO {
         this.user = parkingTicket.getUser();
         this.parkingCity = parkingTicket.getParkingCity();
         this.parkingZone = parkingTicket.getParkingZone();
-        this.recordStatus = parkingTicket.getRecordStatus().getParkingStatus();
+        this.recordStatus = parkingTicket.getRecordStatus().getParkingStatusName();
         this.parkingBegan = parkingTicket.getParkingBegan();
         this.parkingEnd = parkingTicket.getParkingEnd();
         this.ticketAmount = parkingTicket.getTicketAmount();

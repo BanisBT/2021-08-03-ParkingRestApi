@@ -26,9 +26,26 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(RecordStatusNotFoundException.class)
-    public ResponseEntity<Error> exceptionHandle(RecordStatusNotFoundException e) {
-        log.error("Record status not found - {}", e.getName());
+//    TODO HttpStatusas?
+    @ExceptionHandler(ParkingCityNotFoundException.class)
+    public ResponseEntity<Error> exceptionHandle(ParkingCityNotFoundException e) {
+        log.warn("Parking city - {} not found in data base, or bad request", e.getName());
+        return new ResponseEntity<>(new Error(HttpStatus.BAD_REQUEST.value(), "Invalid parking city"),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    //    TODO HttpStatusas?
+    @ExceptionHandler(ParkingZoneNotFoundException.class)
+    public ResponseEntity<Error> exceptionHandle(ParkingZoneNotFoundException e) {
+        log.warn("Parking zone - {} not found in data base, or bad request", e.getName());
+        return new ResponseEntity<>(new Error(HttpStatus.BAD_REQUEST.value(), "Invalid parking zone"),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AppParametersInDateBaseNotFoundException.class)
+    public ResponseEntity<Error> exceptionHandle(AppParametersInDateBaseNotFoundException e) {
+        log.error("App parameter - {} in db not found", e.getName());
+        e.printStackTrace();
         return new ResponseEntity<>(new Error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Server error"),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }

@@ -1,7 +1,7 @@
 package com.tbarauskas.parkingrestapi.service;
 
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
-import com.tbarauskas.parkingrestapi.excepsion.RecordStatusNotFoundException;
+import com.tbarauskas.parkingrestapi.excepsion.AppParametersInDateBaseNotFoundException;
 import com.tbarauskas.parkingrestapi.repository.ParkingRecordStatusRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,6 @@ public class ParkingRecordStatusService {
 
     public ParkingRecordStatus getStatus(String statusName) {
         return statusRepository.getParkingRecordStatusByParkingStatusIgnoreCase(statusName).
-                orElseThrow(() -> new RecordStatusNotFoundException(statusName));
+                orElseThrow(() -> new AppParametersInDateBaseNotFoundException(statusName));
     }
 }

@@ -6,18 +6,24 @@ import com.tbarauskas.parkingrestapi.dto.parking.fine.UpdateParkingFineRequestDT
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.service.ParkingFineService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping("/fines")
+@Api(tags = "This is ParkingFine controller")
 public class ParkingFineController {
 
     private final ParkingFineService fineService;
@@ -26,6 +32,12 @@ public class ParkingFineController {
         this.fineService = fineService;
     }
 
+    @ApiOperation(value = "Get parking fine", tags = "getFine", httpMethod = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "ParkingFine not found"),
+    })
     @GetMapping("{id}")
     public ParkingFine getFine(@PathVariable Long id) {
         return fineService.getFine(id);
@@ -52,10 +64,10 @@ public class ParkingFineController {
         return new ParkingFineResponseDTO(parkingFine);
     }
 
-    @PatchMapping("/{id}/{status}")
-    public void changeFineStatus(@PathVariable Long id, @PathVariable(name = "status") String fineStatus) {
+    @PatchMapping("/{id}/setStatus/{status}")
+    public void setFineStatus(@PathVariable Long id, @PathVariable(name = "status") String fineStatus) {
         log.debug("Parking fine's - {} status was changed to - {}", fineService.getFine(id), fineStatus);
-        fineService.changeFineStatus(id, fineStatus);
+        fineService.setFineStatus(id, fineStatus);
     }
 
     @PutMapping("/{id}")

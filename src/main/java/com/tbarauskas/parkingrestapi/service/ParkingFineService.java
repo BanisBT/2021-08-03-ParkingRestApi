@@ -7,6 +7,7 @@ import com.tbarauskas.parkingrestapi.excepsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.repository.ParkingFineRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -55,9 +56,15 @@ public class ParkingFineService {
         return getFine(id).getUser();
     }
 
-    public void changeFineStatus(Long id, String fineStatus) {
+    public void setFineStatus(Long id, String fineStatus) {
         ParkingFine fine = getFine(id);
         fine.setRecordStatus(statusService.getStatus(fineStatus));
+        fineRepository.save(fine);
+    }
+
+    public void setFineAmount(Long id, BigDecimal fineAmount) {
+        ParkingFine fine = getFine(id);
+        fine.setFineAmount(fineAmount);
         fineRepository.save(fine);
     }
 }

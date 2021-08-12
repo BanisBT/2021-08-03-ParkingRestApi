@@ -70,7 +70,7 @@ public class ParkingTicketService {
         return getTicket(id).getUser();
     }
 
-    public void changeTicketsStatus(Long id, String statusName) {
+    public void setTicketsStatus(Long id, String statusName) {
         ParkingTicket ticket = getTicket(id);
         ticket.setRecordStatus(statusService.getStatus(statusName));
         ticketRepository.save(ticket);

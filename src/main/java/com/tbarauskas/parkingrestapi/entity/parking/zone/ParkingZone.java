@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,6 +23,12 @@ public class ParkingZone {
 
     @Column(name = "name")
     private String zoneName;
+
+    @Column(name = "fine")
+    private BigDecimal fine;
+
+    @Column(name = "cost_per_hour")
+    private BigDecimal costPerHour;
 
     @CreationTimestamp
     private LocalDateTime created;

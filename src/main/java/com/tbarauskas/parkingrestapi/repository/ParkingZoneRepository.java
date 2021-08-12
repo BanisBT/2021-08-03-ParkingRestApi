@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface ParkingZoneRepository extends JpaRepository<ParkingZone, Long> {
 
     Optional<ParkingZone> getParkingZoneByZoneName(String zoneName);
+
+    Optional<ParkingZone> getParkingZoneById(Long id);
 }

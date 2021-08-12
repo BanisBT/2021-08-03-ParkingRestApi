@@ -1,13 +1,9 @@
 package com.tbarauskas.parkingrestapi.excepsion;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class ResourceNotFoundException extends RuntimeException{
 
     private final Long id;
-
-    public ResourceNotFoundException(Long id) {
-        this.id = id;
-    }
 }

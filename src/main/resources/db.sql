@@ -15,10 +15,12 @@ CREATE TABLE parking_record_status
 
 CREATE TABLE parking_zone
 (
-    id      BIGSERIAL PRIMARY KEY NOT NULL,
-    name    VARCHAR(255) UNIQUE   NOT NULL,
-    created timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP
+    id            BIGSERIAL PRIMARY KEY NOT NULL,
+    name          VARCHAR(255) UNIQUE   NOT NULL,
+    fine          NUMERIC(8, 2)         NOT NULL,
+    cost_per_hour NUMERIC(6, 2)         NOT NULL,
+    created       timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated       timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE parking_city
@@ -79,13 +81,13 @@ VALUES ('VILNIUS'),
        ('KAUNAS'),
        ('KLAIPEDA');
 
-INSERT INTO parking_zone(name)
-VALUES ('VILNIUS_BLUE_ZONE'),
-       ('VILNIUS_RED_ZONE'),
-       ('VILNIUS_GREEN_ZONE'),
-       ('KAUNAS_BLUE_ZONE'),
-       ('KAUNAS_RED_ZONE'),
-       ('KLAIPEDA_BLUE_ZONE');
+INSERT INTO parking_zone(name, cost_per_hour, fine)
+VALUES ('VILNIUS_BLUE_ZONE', 10, 100),
+       ('VILNIUS_RED_ZONE', 8, 80),
+       ('VILNIUS_GREEN_ZONE', 6, 60),
+       ('KAUNAS_BLUE_ZONE', 5, 50),
+       ('KAUNAS_RED_ZONE', 4, 40),
+       ('KLAIPEDA_BLUE_ZONE', 3, 30);
 
 INSERT INTO user_table (username, password, name, surname, car_number, balance)
 VALUES ('Banis', 'Geras', 'Tomas', 'Barauskas', 'XXX 777', 100),

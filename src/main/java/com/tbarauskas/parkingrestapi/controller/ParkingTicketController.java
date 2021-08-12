@@ -63,6 +63,12 @@ public class ParkingTicketController {
         return new ParkingTicketResponseDTO(parkingTicket);
     }
 
+    @PatchMapping("/{id}/{status}")
+    public void changeFineStatus(@PathVariable Long id, @PathVariable(name = "status") String ticketStatus) {
+        log.debug("Parking ticket's - {} status was changed to - {}", ticketService.getTicket(id), ticketStatus);
+        ticketService.changeTicketsStatus(id, ticketStatus);
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTicket(@PathVariable Long id) {

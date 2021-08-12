@@ -52,8 +52,15 @@ public class ParkingFineController {
         return new ParkingFineResponseDTO(parkingFine);
     }
 
+    @PatchMapping("/{id}/{status}")
+    public void changeFineStatus(@PathVariable Long id, @PathVariable(name = "status") String fineStatus) {
+        log.debug("Parking fine's - {} status was changed to - {}", fineService.getFine(id), fineStatus);
+        fineService.changeFineStatus(id, fineStatus);
+    }
+
     @PutMapping("/{id}")
-    public ParkingFineResponseDTO updateFine(@Valid @PathVariable Long id, @RequestBody UpdateParkingFineRequestDTO updateFineDTO) {
+    public ParkingFineResponseDTO updateFine(@Valid @PathVariable Long id,
+                                             @RequestBody UpdateParkingFineRequestDTO updateFineDTO) {
         ParkingFine parkingFine = fineService.updateFine(id, new ParkingFine(updateFineDTO));
         log.debug("ParkingFine - {} has been successfully updated", parkingFine);
         return new ParkingFineResponseDTO(parkingFine);

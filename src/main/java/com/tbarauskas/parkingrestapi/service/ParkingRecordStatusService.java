@@ -17,7 +17,7 @@ public class ParkingRecordStatusService {
     }
 
     public ParkingRecordStatus getStatus(String statusName) {
-        return statusRepository.getParkingRecordStatusByParkingStatusNameIgnoreCase(statusName).
+        return statusRepository.getParkingRecordStatusByParkingStatusName(statusName).
                 orElseThrow(() -> new AppParametersInDateBaseNotFoundException(statusName));
     }
 }

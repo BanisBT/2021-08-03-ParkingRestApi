@@ -17,9 +17,19 @@ public class ParkingTicketService {
 
     private final ParkingRecordStatusService statusService;
 
-    public ParkingTicketService(ParkingTicketRepository ticketRepository, ParkingRecordStatusService statusService) {
+    private final ParkingZoneService zoneService;
+
+    private final ParkingCityService cityService;
+
+    private final UserService userService;
+
+    public ParkingTicketService(ParkingTicketRepository ticketRepository, ParkingRecordStatusService statusService,
+                                ParkingZoneService zoneService, ParkingCityService cityService, UserService userService) {
         this.ticketRepository = ticketRepository;
         this.statusService = statusService;
+        this.zoneService = zoneService;
+        this.cityService = cityService;
+        this.userService = userService;
     }
 
     public ParkingTicket getTicket(Long id) {
@@ -37,8 +47,12 @@ public class ParkingTicketService {
         return ticketRepository.getParkingTicketsByParkingBeganBetween(dateFrom, dateTo);
     }
 
-    public ParkingTicket createTicket(ParkingTicket parkingTicket) {
+    public ParkingTicket createTicket(ParkingTicket parkingTicket, String cityName, String zoneName) {
+        parkingTicket.setUser(userService.getUser(1L));
+        parkingTicket.setParkingCity(cityService.getCity(cityName));
+        parkingTicket.setParkingZone(zoneService.getZone(zoneName));
         parkingTicket.setRecordStatus(statusService.getStatus(ParkingStatusName.OPEN.toString()));
+        parkingTicket.setParkingBegan(LocalDateTime.now());
         return ticketRepository.save(parkingTicket);
     }
 

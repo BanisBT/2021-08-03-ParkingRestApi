@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface ParkingRecordStatusRepository extends JpaRepository<ParkingRecordStatus, Long> {
 
-    Optional<ParkingRecordStatus> getParkingRecordStatusByParkingStatusIgnoreCase(String parkingStatusName);
+    Optional<ParkingRecordStatus> getParkingRecordStatusByParkingStatusNameIgnoreCase(String parkingStatusName);
 }

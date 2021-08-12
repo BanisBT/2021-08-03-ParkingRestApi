@@ -31,10 +31,12 @@ public class ParkingFine {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Transient
+    @ManyToOne
+    @JoinColumn(name = "parking_city")
     private ParkingCity parkingCity;
 
-    @Transient
+    @ManyToOne
+    @JoinColumn(name = "parking_zone")
     private ParkingZone parkingZone;
 
     @ManyToOne

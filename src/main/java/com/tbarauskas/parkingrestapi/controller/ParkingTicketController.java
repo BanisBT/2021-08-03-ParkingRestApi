@@ -45,10 +45,12 @@ public class ParkingTicketController {
         return ticketService.getTickets(dateFrom, dateTo);
     }
 
-    @PostMapping
+    @PostMapping("/{city}/{zone}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ParkingTicketResponseDTO createTicket(@Valid @RequestBody CreateParkingTicketRequestDTO ticketRequestDTO) {
-        ParkingTicket parkingTicket = ticketService.createTicket(new ParkingTicket(ticketRequestDTO));
+    public ParkingTicketResponseDTO createTicket(@PathVariable(name = "city") String cityName,
+                                                 @PathVariable(name = "zone") String zoneName,
+                                                 @Valid @RequestBody CreateParkingTicketRequestDTO ticketRequestDTO) {
+        ParkingTicket parkingTicket = ticketService.createTicket(new ParkingTicket(ticketRequestDTO), cityName, zoneName);
         log.debug("ParkingTicket - {} has been successfully created", parkingTicket);
         return new ParkingTicketResponseDTO(parkingTicket);
     }

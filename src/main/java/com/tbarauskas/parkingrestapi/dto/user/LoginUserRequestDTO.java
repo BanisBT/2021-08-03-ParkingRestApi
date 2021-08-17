@@ -8,4 +8,6 @@ public class LoginUserRequestDTO {
     private String username;
 
     private String password;
+
+
 }

@@ -5,6 +5,7 @@ import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -42,6 +43,13 @@ public class GlobalExceptionHandler {
         log.warn("Parking zone - {} not found in data base, or bad request", e.getName());
         return new ResponseEntity<>(new Error(HttpStatus.BAD_REQUEST.value(), "Invalid parking zone"),
                 HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Error> exceptionHandle(AccessDeniedException e) {
+        log.warn("Unauthorized attempt. Message - {}", e.getMessage());
+        return new ResponseEntity<>(new Error(HttpStatus.FORBIDDEN.value(), "Access is forbidden"),
+                HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(AppParametersInDateBaseNotFoundException.class)

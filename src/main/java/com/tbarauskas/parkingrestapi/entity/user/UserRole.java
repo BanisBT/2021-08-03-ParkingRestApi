@@ -24,10 +24,12 @@ public class UserRole implements GrantedAuthority {
     @Column(name = "name")
     private String userRole;
 
+    @Transient
     @CreationTimestamp
     @Column(name = "created")
     private LocalDateTime created;
 
+    @Transient
     @UpdateTimestamp
     @Column(name = "updated")
     private LocalDateTime updated;

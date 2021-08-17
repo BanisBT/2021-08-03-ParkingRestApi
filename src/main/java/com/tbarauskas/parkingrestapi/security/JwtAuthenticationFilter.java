@@ -2,13 +2,12 @@ package com.tbarauskas.parkingrestapi.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tbarauskas.parkingrestapi.dto.user.LoginUserRequestDTO;
-import com.tbarauskas.parkingrestapi.entity.user.User;
-import com.tbarauskas.parkingrestapi.service.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -19,21 +18,20 @@ import java.io.IOException;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-    private JwtService jwtService;
-
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtService jwtService) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
-        this.jwtService = jwtService;
         this.objectMapper = new ObjectMapper();
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException {
         try {
             LoginUserRequestDTO loginRequest = objectMapper.readValue(request.getReader(), LoginUserRequestDTO.class);
-            UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
+            UsernamePasswordAuthenticationToken authRequest =
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
 
             return this.getAuthenticationManager().authenticate(authRequest);
         } catch (IOException e) {
@@ -42,8 +40,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        String jwt = jwtService.createToken((User) authResult.getPrincipal());
-        System.out.println("jwt");
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
+                                            Authentication authResult) throws IOException, ServletException {
+        SecurityContextHolder.getContext().setAuthentication(authResult);
+        chain.doFilter(request, response);
     }
 }

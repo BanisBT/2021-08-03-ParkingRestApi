@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -44,14 +43,6 @@ public class UserController {
     @GetMapping("/{id}/fines")
     public List<ParkingFine> getUsersFines(@PathVariable Long id) {
         return userService.getUsersFines(id);
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserResponseDTO createUser(@Valid @RequestBody CreateUserRequestDTO createUserRequestDTO) {
-        User user = userService.createUser(new User(createUserRequestDTO));
-        log.debug("User - {} has been successfully created", user);
-        return new UserResponseDTO(user);
     }
 
     @PutMapping("/{id}")

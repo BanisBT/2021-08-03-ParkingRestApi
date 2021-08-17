@@ -29,6 +29,15 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(UsernameAlreadyExistException.class)
+    public ResponseEntity<Error> exceptionHandle(UsernameAlreadyExistException e) {
+        log.debug("Username - {} already exist in db", e.getUsername());
+        return new ResponseEntity<>(new Error(HttpStatus.BAD_REQUEST.value(),
+                String.format("Username - %s already exist", e.getUsername())),
+                HttpStatus.BAD_REQUEST);
+
+    }
+
 //    TODO HttpStatusas?
     @ExceptionHandler(ParkingCityNotFoundException.class)
     public ResponseEntity<Error> exceptionHandle(ParkingCityNotFoundException e) {

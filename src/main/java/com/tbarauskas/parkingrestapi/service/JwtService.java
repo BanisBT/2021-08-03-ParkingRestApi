@@ -1,6 +1,5 @@
 package com.tbarauskas.parkingrestapi.service;
 
-import com.tbarauskas.parkingrestapi.dto.user.UserSecurityDTO;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.entity.user.UserRole;
 import io.jsonwebtoken.*;
@@ -12,7 +11,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import java.security.SignatureException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +35,7 @@ public class JwtService {
                 .setExpiration(new Date(now.getTime() + validity * 60000))
                 .setIssuedAt(now)
                 .claim("roles", user.getRoles().stream().map(UserRole::getAuthority).collect(Collectors.toSet()))
-                .claim("userId", user.getId())
+//                .claim("userId", user.getId())
                 .signWith(Keys.hmacShaKeyFor(secret), SignatureAlgorithm.HS512)
                 .compact();
     }

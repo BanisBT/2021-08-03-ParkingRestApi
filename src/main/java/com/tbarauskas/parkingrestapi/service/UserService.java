@@ -3,22 +3,34 @@ package com.tbarauskas.parkingrestapi.service;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.entity.user.User;
+import com.tbarauskas.parkingrestapi.exceptsion.AppParametersInDateBaseNotFoundException;
 import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
+import com.tbarauskas.parkingrestapi.exceptsion.UsernameAlreadyExistException;
+import com.tbarauskas.parkingrestapi.model.UserRoleName;
 import com.tbarauskas.parkingrestapi.repository.UserRepository;
+import com.tbarauskas.parkingrestapi.repository.UserRoleRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final UserRoleRepository roleRepository;
+
+    private final PasswordEncoder encoder;
+
+    public UserService(UserRepository userRepository, UserRoleRepository roleRepository, PasswordEncoder encoder) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.encoder = encoder;
     }
 
     public User getUser(Long id) {
@@ -33,6 +45,13 @@ public class UserService implements UserDetailsService {
     }
 
     public User createUser(User user) {
+        if (userRepository.getUserByUsername(user.getUsername()).isPresent()) {
+            throw new UsernameAlreadyExistException(user.getUsername());
+        }
+        user.setRoles(Set.of(roleRepository.getUserRoleByUserRole(UserRoleName.REGULAR.name()).
+                orElseThrow(() -> new AppParametersInDateBaseNotFoundException(UserRoleName.REGULAR.name()))));
+        user.setPassword(encoder.encode(user.getPassword()));
+
         return userRepository.save(user);
     }
 

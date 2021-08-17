@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/users")
-@Api(tags = "This is User controller")
+@Api(tags = "User controller")
 public class UserController {
 
     private final UserService userService;

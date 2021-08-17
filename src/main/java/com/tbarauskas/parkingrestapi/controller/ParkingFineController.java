@@ -5,25 +5,21 @@ import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineResponseDTO;
 import com.tbarauskas.parkingrestapi.dto.parking.fine.UpdateParkingFineRequestDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.user.User;
-import com.tbarauskas.parkingrestapi.service.ParkingFineService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import com.tbarauskas.parkingrestapi.service.parking.ParkingFineService;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping("/fines")
-@Api(tags = "This is ParkingFine controller")
+@Api(tags = "ParkingFine controller")
 public class ParkingFineController {
 
     private final ParkingFineService fineService;
@@ -35,6 +31,7 @@ public class ParkingFineController {
     @ApiOperation(value = "Get parking fine", tags = "getFine", httpMethod = "GET")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "ParkingFine not found"),
     })
@@ -49,7 +46,8 @@ public class ParkingFineController {
     }
 
     @GetMapping()
-    public List<ParkingFine> getFines(@RequestParam(required = false, value = "from")
+    public List<ParkingFine> getFines(@ApiParam(value = "Date and time from searching parking fine", example = "2021-04-09T11:00:00")
+                                      @RequestParam(required = false, value = "from")
                                       @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime dateFrom,
                                       @RequestParam(required = false, value = "to")
                                       @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime dateTo) {

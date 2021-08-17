@@ -1,8 +1,8 @@
-package com.tbarauskas.parkingrestapi.service;
+package com.tbarauskas.parkingrestapi.service.parking;
 
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
-import com.tbarauskas.parkingrestapi.excepsion.AppParametersInDateBaseNotFoundException;
-import com.tbarauskas.parkingrestapi.excepsion.ResourceNotFoundException;
+import com.tbarauskas.parkingrestapi.exceptsion.AppParametersInDateBaseNotFoundException;
+import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.repository.ParkingZoneRepository;
 import org.springframework.stereotype.Service;
 

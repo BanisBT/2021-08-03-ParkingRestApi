@@ -1,7 +1,7 @@
-package com.tbarauskas.parkingrestapi.service;
+package com.tbarauskas.parkingrestapi.service.parking;
 
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
-import com.tbarauskas.parkingrestapi.excepsion.AppParametersInDateBaseNotFoundException;
+import com.tbarauskas.parkingrestapi.exceptsion.AppParametersInDateBaseNotFoundException;
 import com.tbarauskas.parkingrestapi.repository.ParkingRecordStatusRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

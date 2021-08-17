@@ -1,4 +1,4 @@
-package com.tbarauskas.parkingrestapi.excepsion;
+package com.tbarauskas.parkingrestapi.exceptsion;
 
 import com.tbarauskas.parkingrestapi.model.Error;
 import io.swagger.annotations.Api;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @RestControllerAdvice
-@Api(tags = "This is exception controller")
+@Api(tags = "Exception controller")
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)

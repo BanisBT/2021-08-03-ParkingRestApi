@@ -1,4 +1,4 @@
-package com.tbarauskas.parkingrestapi.excepsion;
+package com.tbarauskas.parkingrestapi.exceptsion;
 
 import lombok.Data;
 

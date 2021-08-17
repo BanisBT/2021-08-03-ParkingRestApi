@@ -5,7 +5,7 @@ import com.tbarauskas.parkingrestapi.dto.parking.ticket.ParkingTicketResponseDTO
 import com.tbarauskas.parkingrestapi.dto.parking.ticket.UpdateParkingTicketRequestTDO;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.entity.user.User;
-import com.tbarauskas.parkingrestapi.service.ParkingTicketService;
+import com.tbarauskas.parkingrestapi.service.parking.ParkingTicketService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/tickets")
-@Api(tags = "This is ParkingTicket controller")
+@Api(tags = "ParkingTicket controller")
 public class ParkingTicketController {
 
     private final ParkingTicketService ticketService;

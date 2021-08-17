@@ -1,10 +1,11 @@
-package com.tbarauskas.parkingrestapi.service;
+package com.tbarauskas.parkingrestapi.service.parking;
 
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.entity.user.User;
-import com.tbarauskas.parkingrestapi.excepsion.ResourceNotFoundException;
+import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.model.ParkingStatusName;
 import com.tbarauskas.parkingrestapi.repository.ParkingTicketRepository;
+import com.tbarauskas.parkingrestapi.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

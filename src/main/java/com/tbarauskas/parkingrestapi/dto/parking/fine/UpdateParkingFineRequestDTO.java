@@ -4,6 +4,7 @@ import com.tbarauskas.parkingrestapi.entity.parking.city.ParkingCity;
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
 import com.tbarauskas.parkingrestapi.entity.user.User;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -14,9 +15,12 @@ import java.time.LocalDateTime;
 public class UpdateParkingFineRequestDTO {
 
     @NotNull
+    @ApiModelProperty(notes = "Parking fine ID", required = true, name = "id", value = "1", example = "1")
     private Long id;
 
     @NotBlank
+//    TODO new User as value needed?
+    @ApiModelProperty(notes = "Parking fine's owner", required = true, name = "user", value = "user")
     private User user;
 
     @NotBlank

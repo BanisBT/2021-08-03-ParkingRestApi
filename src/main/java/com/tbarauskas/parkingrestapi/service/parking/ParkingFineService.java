@@ -1,9 +1,8 @@
-package com.tbarauskas.parkingrestapi.service;
+package com.tbarauskas.parkingrestapi.service.parking;
 
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
-import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import com.tbarauskas.parkingrestapi.entity.user.User;
-import com.tbarauskas.parkingrestapi.excepsion.ResourceNotFoundException;
+import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.repository.ParkingFineRepository;
 import org.springframework.stereotype.Service;
 

@@ -2,6 +2,7 @@ package com.tbarauskas.parkingrestapi.repository;
 
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
+import com.tbarauskas.parkingrestapi.entity.user.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -10,8 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.tbarauskas.parkingrestapi.model.ParkingStatusName.OPEN;
-import static com.tbarauskas.parkingrestapi.model.ParkingStatusName.PAID;
+import static com.tbarauskas.parkingrestapi.model.ParkingStatusName.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -27,6 +27,9 @@ class ParkingFineRepositoryTest {
 
     @Autowired
     private ParkingRecordStatusRepository statusRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     void testGetParkingFineById() {
@@ -61,12 +64,20 @@ class ParkingFineRepositoryTest {
     }
 
     @Test
-    void getParkingFinesByRecordStatus() {
+    void getParkingFinesByUserAndRecordStatus() {
+        User user = userRepository.getById(1L);
+        User userUnpaid = userRepository.getById(2L);
         ParkingRecordStatus paid = statusRepository.getParkingRecordStatusByParkingStatusName(PAID.name())
                 .orElse(null);
-        List<ParkingFine> fines = fineRepository.getParkingFinesByRecordStatus(paid);
+        ParkingRecordStatus unpaid = statusRepository.getParkingRecordStatusByParkingStatusName(UNPAID.name())
+                .orElse(null);
 
-        assertEquals(2, fines.size());
-        assertEquals(4L, fines.get(1).getId());
+        List<ParkingFine> fines = fineRepository.getParkingFinesByUserAndRecordStatus(user, paid);
+        List<ParkingFine> finesUnpaid = fineRepository.getParkingFinesByUserAndRecordStatus(userUnpaid, unpaid);
+
+        assertEquals(1, fines.size());
+        assertEquals(3, finesUnpaid.size());
+        assertEquals(1L, fines.get(0).getId());
+        assertEquals(2L, finesUnpaid.get(0).getId());
     }
 }

@@ -3,6 +3,7 @@ package com.tbarauskas.parkingrestapi.service.parking;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
+import com.tbarauskas.parkingrestapi.exceptsion.UserHasOpenTicketException;
 import com.tbarauskas.parkingrestapi.model.ParkingStatusName;
 import com.tbarauskas.parkingrestapi.repository.ParkingTicketRepository;
 import com.tbarauskas.parkingrestapi.service.UserService;
@@ -48,13 +49,20 @@ public class ParkingTicketService {
         return ticketRepository.getParkingTicketsByParkingBeganBetween(dateFrom, dateTo);
     }
 
-    public ParkingTicket createTicket(ParkingTicket parkingTicket, String cityName, String zoneName) {
-        parkingTicket.setUser(userService.getUser(1L));
-        parkingTicket.setParkingCity(cityService.getCity(cityName));
-        parkingTicket.setParkingZone(zoneService.getZone(zoneName));
-        parkingTicket.setRecordStatus(statusService.getStatus(ParkingStatusName.OPEN.toString()));
-        parkingTicket.setParkingBegan(LocalDateTime.now());
-        return ticketRepository.save(parkingTicket);
+    public ParkingTicket createTicket(ParkingTicket parkingTicket, String cityName, String zoneName, User user) {
+        ParkingTicket openTicket = getUsersOpenTicket(user);
+
+        if (openTicket == null) {
+            parkingTicket.setUser(userService.getUser(user.getId()));
+            parkingTicket.setParkingCity(cityService.getCity(cityName));
+            parkingTicket.setParkingZone(zoneService.getZone(zoneName));
+            parkingTicket.setRecordStatus(statusService.getStatus(ParkingStatusName.OPEN.toString()));
+            parkingTicket.setParkingBegan(LocalDateTime.now());
+
+            return ticketRepository.save(parkingTicket);
+        } else {
+            throw new UserHasOpenTicketException(openTicket);
+        }
     }
 
     public ParkingTicket updateTicket(Long id, ParkingTicket updateParkingTicket) {
@@ -75,5 +83,10 @@ public class ParkingTicketService {
         ParkingTicket ticket = getTicket(id);
         ticket.setRecordStatus(statusService.getStatus(statusName));
         ticketRepository.save(ticket);
+    }
+
+    private ParkingTicket getUsersOpenTicket(User user) {
+        return ticketRepository.getParkingTicketByUserAndRecordStatus(user,
+                statusService.getStatus(ParkingStatusName.OPEN.name())).orElse(null);
     }
 }

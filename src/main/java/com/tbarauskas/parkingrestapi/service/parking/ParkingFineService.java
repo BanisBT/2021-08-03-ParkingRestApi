@@ -1,6 +1,7 @@
 package com.tbarauskas.parkingrestapi.service.parking;
 
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
+import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.repository.ParkingFineRepository;
@@ -65,5 +66,9 @@ public class ParkingFineService {
         ParkingFine fine = getFine(id);
         fine.setFineAmount(fineAmount);
         fineRepository.save(fine);
+    }
+
+    public List<ParkingFine> getUsersFinesByStatus(User user, ParkingRecordStatus status) {
+        return fineRepository.getParkingFinesByUserAndRecordStatus(user, status);
     }
 }

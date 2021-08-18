@@ -3,12 +3,12 @@ package com.tbarauskas.parkingrestapi.service;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.entity.user.User;
-import com.tbarauskas.parkingrestapi.exceptsion.AppParametersInDateBaseNotFoundException;
 import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.exceptsion.UsernameAlreadyExistException;
 import com.tbarauskas.parkingrestapi.model.UserRoleName;
 import com.tbarauskas.parkingrestapi.repository.UserRepository;
-import com.tbarauskas.parkingrestapi.repository.UserRoleRepository;
+import com.tbarauskas.parkingrestapi.service.parking.ParkingFineService;
+import com.tbarauskas.parkingrestapi.service.parking.ParkingRecordStatusService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,19 +18,28 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
 
+import static com.tbarauskas.parkingrestapi.model.ParkingStatusName.UNPAID;
+
 @Service
 public class UserService implements UserDetailsService {
 
-    private final UserRepository userRepository;
-
-    private final UserRoleRepository roleRepository;
-
     private final PasswordEncoder encoder;
 
-    public UserService(UserRepository userRepository, UserRoleRepository roleRepository, PasswordEncoder encoder) {
+    private final UserRepository userRepository;
+
+    private final UserRoleService roleService;
+
+    private final ParkingRecordStatusService statusService;
+
+    private final ParkingFineService fineService;
+
+    public UserService(UserRepository userRepository, PasswordEncoder encoder, UserRoleService roleService,
+                       ParkingRecordStatusService statusService, ParkingFineService fineService) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.encoder = encoder;
+        this.roleService = roleService;
+        this.statusService = statusService;
+        this.fineService = fineService;
     }
 
     public User getUser(Long id) {
@@ -48,8 +57,7 @@ public class UserService implements UserDetailsService {
         if (userRepository.getUserByUsername(user.getUsername()).isPresent()) {
             throw new UsernameAlreadyExistException(user.getUsername());
         }
-        user.setRoles(Set.of(roleRepository.getUserRoleByUserRole(UserRoleName.REGULAR.name()).
-                orElseThrow(() -> new AppParametersInDateBaseNotFoundException(UserRoleName.REGULAR.name()))));
+        user.setRoles(Set.of(roleService.getUserRole(UserRoleName.REGULAR.name())));
         user.setPassword(encoder.encode(user.getPassword()));
 
         return userRepository.save(user);
@@ -67,6 +75,10 @@ public class UserService implements UserDetailsService {
 
     public List<ParkingFine> getUsersFines(Long id) {
         return getUser(id).getFines();
+    }
+
+    public List<ParkingFine> getUsersUnpaidFines(Long id) {
+        return fineService.getUsersFinesByStatus(getUser(id), statusService.getStatus(UNPAID.name()));
     }
 
     public List<ParkingTicket> getUsersTickets(Long id) {

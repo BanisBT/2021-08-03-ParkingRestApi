@@ -2,6 +2,7 @@ package com.tbarauskas.parkingrestapi.repository;
 
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
+import com.tbarauskas.parkingrestapi.entity.user.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -27,8 +28,11 @@ class ParkingTicketRepositoryTest {
     @Autowired
     private ParkingRecordStatusRepository statusRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Test
-    void getParkingTicketById() {
+    void testGetParkingTicketById() {
         ParkingTicket ticket = ticketRepository.getParkingTicketById(1L).orElse(null);
 
         assert ticket != null;
@@ -36,7 +40,7 @@ class ParkingTicketRepositoryTest {
     }
 
     @Test
-    void getParkingTicketsByParkingBeganAfter() {
+    void testGetParkingTicketsByParkingBeganAfter() {
         List<ParkingTicket> tickets = ticketRepository.getParkingTicketsByParkingBeganAfter(after);
 
         assertEquals(2, tickets.size());
@@ -44,7 +48,7 @@ class ParkingTicketRepositoryTest {
     }
 
     @Test
-    void getParkingTicketsByParkingBeganBefore() {
+    void testGetParkingTicketsByParkingBeganBefore() {
         List<ParkingTicket> tickets = ticketRepository.getParkingTicketsByParkingBeganBefore(before);
 
         assertEquals(2, tickets.size());
@@ -52,7 +56,7 @@ class ParkingTicketRepositoryTest {
     }
 
     @Test
-    void getParkingTicketsByParkingBeganBetween() {
+    void testGetParkingTicketsByParkingBeganBetween() {
         List<ParkingTicket> tickets = ticketRepository.getParkingTicketsByParkingBeganBetween(after, before);
 
         assertEquals(1, tickets.size());
@@ -60,13 +64,14 @@ class ParkingTicketRepositoryTest {
     }
 
     @Test
-    void getParkingTicketByRecordStatus() {
+    void testGetParkingTicketByUserAndRecordStatus() {
         ParkingRecordStatus open = statusRepository.getParkingRecordStatusByParkingStatusName(OPEN.name())
                 .orElse(null);
-        ParkingTicket ticket = ticketRepository.getParkingTicketByRecordStatus(open).orElse(null);
+        User user = userRepository.getById(2L);
+
+        ParkingTicket ticket = ticketRepository.getParkingTicketByUserAndRecordStatus(user, open).orElse(null);
 
         assert ticket != null;
         assertEquals(1L, ticket.getId());
-        assertEquals(open, ticket.getRecordStatus());
     }
 }

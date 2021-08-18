@@ -45,6 +45,11 @@ public class UserController {
         return userService.getUsersFines(id);
     }
 
+    @GetMapping("/{id}/fines/unpaid")
+    public List<ParkingFine> getUsersUnpaidFines(@PathVariable Long id) {
+        return userService.getUsersUnpaidFines(id);
+    }
+
     @PutMapping("/{id}")
     public UserResponseDTO updateUser(@PathVariable Long id, @RequestBody CreateUserRequestDTO createUserRequestDTO) {
         User user = userService.updateUser(id, new User(createUserRequestDTO));

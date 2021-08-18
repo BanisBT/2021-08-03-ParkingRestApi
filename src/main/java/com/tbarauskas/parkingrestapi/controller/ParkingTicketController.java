@@ -55,8 +55,9 @@ public class ParkingTicketController {
     @ResponseStatus(HttpStatus.CREATED)
     public ParkingTicketResponseDTO createTicket(@PathVariable(name = "city") String cityName,
                                                  @PathVariable(name = "zone") String zoneName,
-                                                 @Valid @RequestBody CreateParkingTicketRequestDTO ticketRequestDTO) {
-        ParkingTicket parkingTicket = ticketService.createTicket(new ParkingTicket(ticketRequestDTO), cityName, zoneName);
+                                                 @Valid @RequestBody CreateParkingTicketRequestDTO ticketRequestDTO,
+                                                 @AuthenticationPrincipal User user) {
+        ParkingTicket parkingTicket = ticketService.createTicket(new ParkingTicket(ticketRequestDTO), cityName, zoneName, user);
         log.debug("ParkingTicket - {} has been successfully created", parkingTicket);
         return new ParkingTicketResponseDTO(parkingTicket);
     }

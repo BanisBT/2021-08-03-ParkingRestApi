@@ -1,6 +1,7 @@
 package com.tbarauskas.parkingrestapi.repository;
 
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
+import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +14,8 @@ import java.util.Optional;
 public interface ParkingTicketRepository extends JpaRepository<ParkingTicket, Long> {
 
     Optional<ParkingTicket> getParkingTicketById(Long id);
+
+    Optional<ParkingTicket> getParkingTicketByRecordStatus(ParkingRecordStatus status);
 
     List<ParkingTicket> getParkingTicketsByParkingBeganAfter(LocalDateTime dateFrom);
 

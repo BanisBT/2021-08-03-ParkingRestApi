@@ -1,6 +1,7 @@
 package com.tbarauskas.parkingrestapi.repository;
 
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
+import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.tbarauskas.parkingrestapi.model.ParkingStatusName.OPEN;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -21,6 +23,9 @@ class ParkingTicketRepositoryTest {
 
     @Autowired
     private ParkingTicketRepository ticketRepository;
+
+    @Autowired
+    private ParkingRecordStatusRepository statusRepository;
 
     @Test
     void getParkingTicketById() {
@@ -35,6 +40,7 @@ class ParkingTicketRepositoryTest {
         List<ParkingTicket> tickets = ticketRepository.getParkingTicketsByParkingBeganAfter(after);
 
         assertEquals(2, tickets.size());
+        assertEquals(2L, tickets.get(0).getId());
     }
 
     @Test
@@ -42,6 +48,7 @@ class ParkingTicketRepositoryTest {
         List<ParkingTicket> tickets = ticketRepository.getParkingTicketsByParkingBeganBefore(before);
 
         assertEquals(2, tickets.size());
+        assertEquals(1L, tickets.get(0).getId());
     }
 
     @Test
@@ -49,5 +56,17 @@ class ParkingTicketRepositoryTest {
         List<ParkingTicket> tickets = ticketRepository.getParkingTicketsByParkingBeganBetween(after, before);
 
         assertEquals(1, tickets.size());
+        assertEquals(2L, tickets.get(0).getId());
+    }
+
+    @Test
+    void getParkingTicketByRecordStatus() {
+        ParkingRecordStatus open = statusRepository.getParkingRecordStatusByParkingStatusName(OPEN.name())
+                .orElse(null);
+        ParkingTicket ticket = ticketRepository.getParkingTicketByRecordStatus(open).orElse(null);
+
+        assert ticket != null;
+        assertEquals(1L, ticket.getId());
+        assertEquals(open, ticket.getRecordStatus());
     }
 }

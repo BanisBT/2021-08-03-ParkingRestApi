@@ -1,6 +1,7 @@
 package com.tbarauskas.parkingrestapi.repository;
 
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
+import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +19,6 @@ public interface ParkingFineRepository extends JpaRepository<ParkingFine,Long> {
     List<ParkingFine> getParkingFinesByFineDateTimeBefore(LocalDateTime dateTo);
 
     List<ParkingFine> getParkingFinesByFineDateTimeBetween(LocalDateTime dateFrom, LocalDateTime dateTo);
+
+    List<ParkingFine> getParkingFinesByRecordStatus(ParkingRecordStatus status);
 }

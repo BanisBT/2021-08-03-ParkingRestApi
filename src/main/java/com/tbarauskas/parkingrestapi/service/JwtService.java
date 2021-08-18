@@ -1,19 +1,17 @@
 package com.tbarauskas.parkingrestapi.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tbarauskas.parkingrestapi.dto.user.TokenUserDTO;
 import com.tbarauskas.parkingrestapi.entity.user.User;
-import com.tbarauskas.parkingrestapi.entity.user.UserRole;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
@@ -23,6 +21,12 @@ public class JwtService {
 
     @Value("${security.jwt.validity-min}")
     private long validity;
+
+    private final ObjectMapper objectMapper;
+
+    public JwtService(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     public String createToken(User user) {
         Date now = new Date();
@@ -34,13 +38,14 @@ public class JwtService {
                 .setSubject(user.getUsername())
                 .setExpiration(new Date(now.getTime() + validity * 60000))
                 .setIssuedAt(now)
-                .claim("roles", user.getRoles().stream().map(UserRole::getAuthority).collect(Collectors.toSet()))
+                .claim("user", new TokenUserDTO(user))
+//                .claim("roles", user.getRoles().stream().map(UserRole::getAuthority).collect(Collectors.toSet()))
 //                .claim("userId", user.getId())
                 .signWith(Keys.hmacShaKeyFor(secret), SignatureAlgorithm.HS512)
                 .compact();
     }
 
-    public Authentication parseToken(String jwt) {
+    public Authentication parseToken(String jwt) throws JsonProcessingException {
         Claims parsedJwtBody;
 
         try {
@@ -54,10 +59,14 @@ public class JwtService {
 
         }
 
-        List<GrantedAuthority> roles = ((List<String>) parsedJwtBody.get("roles")).stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        TokenUserDTO userDTO = objectMapper.readValue(objectMapper.writeValueAsString(parsedJwtBody.get("user")),
+                TokenUserDTO.class);
+        User user = new User(userDTO);
 
-        return new UsernamePasswordAuthenticationToken(parsedJwtBody.getSubject(), null, roles);
+//        List<GrantedAuthority> roles = ((List<String>) parsedJwtBody.get("roles")).stream()
+//                .map(SimpleGrantedAuthority::new)
+//                .collect(Collectors.toList());
+
+        return new UsernamePasswordAuthenticationToken(user, null, user.getRoles());
     }
 }

@@ -2,6 +2,7 @@ package com.tbarauskas.parkingrestapi.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tbarauskas.parkingrestapi.dto.user.CreateUserRequestDTO;
+import com.tbarauskas.parkingrestapi.dto.user.TokenUserDTO;
 import com.tbarauskas.parkingrestapi.dto.user.UpdateUserRequestDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
@@ -87,6 +88,15 @@ public class User implements UserDetails {
         this.name = updateUserDTO.getName();
         this.surname = updateUserDTO.getSurname();
         this.carNumber = updateUserDTO.getCarNumber();
+    }
+
+    public User(TokenUserDTO tokenUserDTO) {
+        this.id = tokenUserDTO.getId();
+        this.username = tokenUserDTO.getUsername();
+        this.carNumber = tokenUserDTO.getCarNumber();
+        this.name = tokenUserDTO.getName();
+        this.surname = tokenUserDTO.getSurname();
+        this.roles = tokenUserDTO.getRoles();
     }
 
     @Override

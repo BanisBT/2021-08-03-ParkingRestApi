@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
         if (search == null) {
             return userRepository.findAll();
         }
-        return userRepository.getUsersByUsernameOrSurnameContainingIgnoreCase(search, search);
+        return userRepository.getUsersByUsernameContainingIgnoreCase(search);
     }
 
     public User createUser(User user) {

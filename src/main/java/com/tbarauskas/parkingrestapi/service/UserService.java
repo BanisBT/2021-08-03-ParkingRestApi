@@ -3,7 +3,7 @@ package com.tbarauskas.parkingrestapi.service;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.entity.user.User;
-import com.tbarauskas.parkingrestapi.exceptsion.NotEnoughMoneyToPayForTicketException;
+import com.tbarauskas.parkingrestapi.exceptsion.NotEnoughMoneyToPayForParkingRecordException;
 import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.exceptsion.UsernameAlreadyExistException;
 import com.tbarauskas.parkingrestapi.model.UserRoleName;
@@ -106,7 +106,21 @@ public class UserService implements UserDetailsService {
             ticketService.setFineStatus(ticket.getId(), PAID.name());
         } else {
             ticketService.setFineStatus(ticket.getId(), UNPAID.name());
-            throw new NotEnoughMoneyToPayForTicketException(user.getBalance().subtract(ticketAmount),
+            throw new NotEnoughMoneyToPayForParkingRecordException(user.getBalance().subtract(ticketAmount),
+                    getUser(user.getId()));
+        }
+    }
+
+    public void isEnoughMoneyToPayForFine(User user, ParkingFine parkingFine) {
+        BigDecimal fineAmount = parkingFine.getFineAmount();
+
+        if (user.getBalance().compareTo(fineAmount) >= 0) {
+            user.setBalance(user.getBalance().subtract(fineAmount));
+            updateUser(user.getId(), user);
+            fineService.setFineStatus(parkingFine.getId(), PAID.name());
+        } else {
+            fineService.setFineStatus(parkingFine.getId(), UNPAID.name());
+            throw new NotEnoughMoneyToPayForParkingRecordException(user.getBalance().subtract(fineAmount),
                     getUser(user.getId()));
         }
     }

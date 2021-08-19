@@ -22,8 +22,8 @@ public class GlobalExceptionHandler {
                 String.format("Resource with id %d - was not found", e.getId())), HttpStatus.NOT_FOUND);
     }
 //TODO koks statusas?
-    @ExceptionHandler(NotEnoughMoneyToPayForTicketException.class)
-    public ResponseEntity<Error> exceptionHandle(NotEnoughMoneyToPayForTicketException e) {
+    @ExceptionHandler(NotEnoughMoneyToPayForParkingRecordException.class)
+    public ResponseEntity<Error> exceptionHandle(NotEnoughMoneyToPayForParkingRecordException e) {
         log.debug("Not enough money to pay for parking ticket, user - {}", e.getUser());
         return new ResponseEntity<>(new Error(HttpStatus.INSUFFICIENT_STORAGE.value(),
                 String.format("Insufficient funds, your balance after paying ticket would be %s", e.getBalance())),
@@ -35,6 +35,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Error> exceptionHandle(UserHasOpenTicketException e) {
         return new ResponseEntity<>(new Error(HttpStatus.FORBIDDEN.value(), "You have open ticket"),
                 HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(InvalidArgumentException.class)
+    public ResponseEntity<Error> exceptionHandle(InvalidArgumentException) {
+        return new ResponseEntity<>(new Error(HttpStatus.BAD_REQUEST.value(), "Must be not null"),
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

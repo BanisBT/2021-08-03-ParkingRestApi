@@ -2,6 +2,7 @@ package com.tbarauskas.parkingrestapi.service.parking;
 
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
 import com.tbarauskas.parkingrestapi.exceptsion.AppParametersInDateBaseNotFoundException;
+import com.tbarauskas.parkingrestapi.exceptsion.InvalidArgumentException;
 import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.repository.ParkingZoneRepository;
 import org.springframework.stereotype.Service;
@@ -27,9 +28,13 @@ public class ParkingZoneService {
     }
 
     public void setZoneFine(Long id, BigDecimal fineAmount) {
-        ParkingZone zone = getZoneById(id);
-        zone.setFine(fineAmount);
-        zoneRepository.save(zone);
+        if (fineAmount == null) {
+            throw new InvalidArgumentException();
+        } else {
+            ParkingZone zone = getZoneById(id);
+            zone.setFine(fineAmount);
+            zoneRepository.save(zone);
+        }
     }
 
     public void setZoneCostPerHour(Long id, BigDecimal costPerHour) {

@@ -3,6 +3,7 @@ package com.tbarauskas.parkingrestapi.service;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.entity.user.User;
+import com.tbarauskas.parkingrestapi.exceptsion.NotEnoughMoneyToPayForTicketException;
 import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.exceptsion.UsernameAlreadyExistException;
 import com.tbarauskas.parkingrestapi.model.UserRoleName;
@@ -15,9 +16,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import static com.tbarauskas.parkingrestapi.model.ParkingStatusName.PAID;
 import static com.tbarauskas.parkingrestapi.model.ParkingStatusName.UNPAID;
 
 @Service
@@ -33,13 +37,20 @@ public class UserService implements UserDetailsService {
 
     private final ParkingFineService fineService;
 
+    private final ParkingFineService ticketService;
+
+    private final FinanceService financeService;
+
     public UserService(UserRepository userRepository, PasswordEncoder encoder, UserRoleService roleService,
-                       ParkingRecordStatusService statusService, ParkingFineService fineService) {
+                       ParkingRecordStatusService statusService, ParkingFineService fineService,
+                       ParkingFineService ticketService, FinanceService financeService) {
         this.userRepository = userRepository;
         this.encoder = encoder;
         this.roleService = roleService;
         this.statusService = statusService;
         this.fineService = fineService;
+        this.ticketService = ticketService;
+        this.financeService = financeService;
     }
 
     public User getUser(Long id) {
@@ -83,6 +94,21 @@ public class UserService implements UserDetailsService {
 
     public List<ParkingTicket> getUsersTickets(Long id) {
         return getUser(id).getTickets();
+    }
+
+    public void isEnoughMoneyToPayForTicket(User user, ParkingTicket ticket, LocalDateTime endParking) {
+        BigDecimal ticketAmount = financeService.getTicketsAmount(ticket.getParkingZone().getCostPerHour(),
+                ticket.getParkingBegan(), endParking);
+
+        if (user.getBalance().compareTo(ticketAmount) >= 0) {
+            user.setBalance(user.getBalance().subtract(ticketAmount));
+            updateUser(user.getId(), user);
+            ticketService.setFineStatus(ticket.getId(), PAID.name());
+        } else {
+            ticketService.setFineStatus(ticket.getId(), UNPAID.name());
+            throw new NotEnoughMoneyToPayForTicketException(user.getBalance().subtract(ticketAmount),
+                    getUser(user.getId()));
+        }
     }
 
     @Override

@@ -10,6 +10,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+//TODO paklausit kuo susijusi si klase su getFine is controller?!?!?
 @Data
 public class ParkingFineResponseDTO {
 
@@ -23,7 +24,7 @@ public class ParkingFineResponseDTO {
 
     private String recordStatus;
 
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime fineDateTime;
 
     private BigDecimal fineAmount;

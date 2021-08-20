@@ -23,10 +23,10 @@ public class ParkingTicketResponseDTO {
 
     private String recordStatus;
 
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime parkingBegan;
 
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime parkingEnd;
 
     private BigDecimal ticketAmount;

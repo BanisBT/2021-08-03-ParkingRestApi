@@ -1,5 +1,6 @@
 package com.tbarauskas.parkingrestapi.entity.parking.record;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tbarauskas.parkingrestapi.dto.parking.ticket.CreateParkingTicketRequestDTO;
 import com.tbarauskas.parkingrestapi.dto.parking.ticket.UpdateParkingTicketRequestTDO;
 import com.tbarauskas.parkingrestapi.entity.parking.city.ParkingCity;

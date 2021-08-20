@@ -99,12 +99,13 @@
             </properties>
             <dependencies>
                 <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                    <version>1.4.200</version>
+                    <scope>test</scope>
                 </dependency>
             </dependencies>
         </profile>
-
         <profile>
             <id>production</id>
             <properties>
@@ -112,12 +113,11 @@
             </properties>
             <dependencies>
                 <dependency>
-                    <groupId>com.h2database</groupId>
-                    <artifactId>h2</artifactId>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
                 </dependency>
             </dependencies>
         </profile>
-
         <profile>
             <id>test</id>
             <properties>
@@ -133,7 +133,6 @@
                     <artifactId>spring-security-test</artifactId>
                     <scope>test</scope>
                 </dependency>
-
             </dependencies>
         </profile>
     </profiles>

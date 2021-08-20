@@ -3,6 +3,8 @@ package com.tbarauskas.parkingrestapi.service.parking;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import com.tbarauskas.parkingrestapi.entity.user.User;
+import com.tbarauskas.parkingrestapi.exceptsion.InvalidArgumentException;
+import com.tbarauskas.parkingrestapi.exceptsion.ParkingRecordHasNotUserException;
 import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.repository.ParkingFineRepository;
 import org.springframework.stereotype.Service;
@@ -53,7 +55,12 @@ public class ParkingFineService {
     }
 
     public User getFinesUser(Long id) {
-        return getFine(id).getUser();
+        User user = getFine(id).getUser();
+        if (user == null) {
+            throw new ParkingRecordHasNotUserException(id);
+        } else {
+            return user;
+        }
     }
 
     public void setFineStatus(Long id, String fineStatus) {
@@ -63,9 +70,14 @@ public class ParkingFineService {
     }
 
     public void setFineAmount(Long id, BigDecimal fineAmount) {
-        ParkingFine fine = getFine(id);
-        fine.setFineAmount(fineAmount);
-        fineRepository.save(fine);
+        if (fineAmount == null) {
+            throw new InvalidArgumentException();
+        } else {
+            ParkingFine fine = getFine(id);
+            fine.setFineAmount(fineAmount);
+            fineRepository.save(fine);
+        }
+
     }
 
     public List<ParkingFine> getUsersFinesByStatus(User user, ParkingRecordStatus status) {

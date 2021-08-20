@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -66,6 +67,14 @@ public class ParkingFineController {
     public void setFineStatus(@PathVariable Long id, @PathVariable(name = "status") String fineStatus) {
         log.debug("Parking fine's - {} status was changed to - {}", fineService.getFine(id), fineStatus);
         fineService.setFineStatus(id, fineStatus);
+    }
+
+//    TODO http status response?
+    @PatchMapping("/{id}/setFineAmount/{amount}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void setFineAmount(@PathVariable Long id, @PathVariable(name = "amount")BigDecimal fineAmount) {
+        log.debug("Parking fine's - {} amount changed to - {}", fineService.getFine(id), fineAmount);
+        fineService.setFineAmount(id, fineAmount);
     }
 
     @PutMapping("/{id}")

@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidArgumentException.class)
-    public ResponseEntity<Error> exceptionHandle(InvalidArgumentException) {
+    public ResponseEntity<Error> exceptionHandle(InvalidArgumentException e) {
         return new ResponseEntity<>(new Error(HttpStatus.BAD_REQUEST.value(), "Must be not null"),
                 HttpStatus.BAD_REQUEST);
     }
@@ -65,6 +65,14 @@ public class GlobalExceptionHandler {
         log.warn("Parking city - {} not found in data base, or bad request", e.getName());
         return new ResponseEntity<>(new Error(HttpStatus.BAD_REQUEST.value(), "Invalid parking city"),
                 HttpStatus.BAD_REQUEST);
+    }
+
+//    TODO HttpStatus?
+    @ExceptionHandler(ParkingRecordHasNotUserException.class)
+    public ResponseEntity<Error> exceptionHandle(ParkingRecordHasNotUserException e) {
+        log.warn("Parking record - {} don't has user", e.getId());
+        return new ResponseEntity<>(new Error(HttpStatus.NOT_FOUND.value(), "Parking record don't has user"),
+                HttpStatus.NOT_FOUND);
     }
 
     //    TODO HttpStatusas?

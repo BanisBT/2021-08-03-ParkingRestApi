@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS user_table;
+DROP TABLE IF EXISTS user_table CASCADE;
 DROP TABLE IF EXISTS parking_fine;
 DROP TABLE IF EXISTS parking_ticket;
 DROP TABLE IF EXISTS parking_record_status;
@@ -65,10 +65,10 @@ CREATE TABLE parking_fine
     id             BIGSERIAL PRIMARY KEY NOT NULL,
     fine_date_time TIMESTAMP             NOT NULL,
     fine_amount    NUMERIC(6, 2),
-    user_id        BIGINT REFERENCES user_table (id),
-    parking_status BIGINT REFERENCES parking_record_status (id),
-    parking_city   BIGINT REFERENCES parking_city (id),
-    parking_zone   BIGINT REFERENCES parking_zone (id),
+    user_id        BIGINT REFERENCES user_table (id) ON DELETE CASCADE,
+    parking_status BIGINT REFERENCES parking_record_status (id) ON DELETE CASCADE,
+    parking_city   BIGINT REFERENCES parking_city (id) ON DELETE CASCADE,
+    parking_zone   BIGINT REFERENCES parking_zone (id) ON DELETE CASCADE,
     created        timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated        timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -79,10 +79,10 @@ CREATE TABLE parking_ticket
     ticket_began   TIMESTAMP             NOT NULL,
     ticket_end     TIMESTAMP,
     ticket_amount  NUMERIC,
-    user_id        BIGINT REFERENCES user_table (id),
-    parking_status BIGINT REFERENCES parking_record_status (id),
-    parking_city   BIGINT REFERENCES parking_city (id),
-    parking_zone   BIGINT REFERENCES parking_zone (id),
+    user_id        BIGINT REFERENCES user_table (id) ON DELETE CASCADE,
+    parking_status BIGINT REFERENCES parking_record_status (id) ON DELETE CASCADE,
+    parking_city   BIGINT REFERENCES parking_city (id) ON DELETE CASCADE,
+    parking_zone   BIGINT REFERENCES parking_zone (id) ON DELETE CASCADE,
     created        timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated        timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -110,7 +110,8 @@ VALUES ('VILNIUS_BLUE_ZONE', 10, 100),
        ('KLAIPEDA_BLUE_ZONE', 3, 30);
 
 INSERT INTO user_table (username, password, name, surname, car_number, balance)
-VALUES ('Banis', '{bcrypt}$2a$10$WJvAKW5R1VM2SSaAWf0WYO/FBcovz6X3BpulRoS2FWdUbcCZPo8V2', 'Tomas', 'Barauskas', 'XXX 777', 100),
+VALUES ('Banis', '{bcrypt}$2a$10$WJvAKW5R1VM2SSaAWf0WYO/FBcovz6X3BpulRoS2FWdUbcCZPo8V2', 'Tomas', 'Barauskas',
+        'XXX 777', 100),
        ('Algelis', 'Blogas', 'Algis', 'Pavardenis', 'YYY 888', 700),
        ('Admin', 'Admin123', 'Admin', 'Admin', 'X', 1),
        ('Saule', 'Saule', 'Laima', 'Pavasaraite', 'SSS 666', 600),

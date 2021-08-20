@@ -38,8 +38,12 @@ public class ParkingZoneService {
     }
 
     public void setZoneCostPerHour(Long id, BigDecimal costPerHour) {
-        ParkingZone zone = getZoneById(id);
-        zone.setCostPerHour(costPerHour);
-        zoneRepository.save(zone);
+        if (costPerHour == null) {
+            throw new InvalidArgumentException();
+        } else {
+            ParkingZone zone = getZoneById(id);
+            zone.setCostPerHour(costPerHour);
+            zoneRepository.save(zone);
+        }
     }
 }

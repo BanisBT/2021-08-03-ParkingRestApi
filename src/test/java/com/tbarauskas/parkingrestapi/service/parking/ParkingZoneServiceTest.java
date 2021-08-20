@@ -75,13 +75,27 @@ class ParkingZoneServiceTest {
     }
 
     @Test
-    void testSetZoneFineNull() {
+    void testSetZoneFineAmountNull() {
         assertThrows(InvalidArgumentException.class, () -> zoneService.setZoneFine(1L, null));
         verify(zoneRepository, times(0)).getParkingZoneById(1L);
         verify(zoneRepository, times(0)).save(zone);
     }
 
     @Test
-    void setZoneCostPerHour() {
+    void testSetZoneCostPerHour() {
+        BigDecimal newCostPerHour = BigDecimal.valueOf(10);
+        when(zoneRepository.getParkingZoneById(1L)).thenReturn(Optional.of(zone));
+
+        zoneService.setZoneCostPerHour(1L, newCostPerHour);
+
+        verify(zoneRepository, times(1)).getParkingZoneById(1L);
+        verify(zoneRepository, times(1)).save(zone);
+    }
+
+    @Test
+    void testSetZoneCostPerHourNull() {
+        assertThrows(InvalidArgumentException.class, () -> zoneService.setZoneCostPerHour(1L, null));
+        verify(zoneRepository, times(0)).getParkingZoneById(1L);
+        verify(zoneRepository, times(0)).save(zone);
     }
 }

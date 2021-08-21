@@ -45,9 +45,11 @@ public class ParkingTicket {
     private ParkingRecordStatus recordStatus;
 
     @Column(name = "ticket_began")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime parkingBegan;
 
     @Column(name = "ticket_end")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime parkingEnd;
 
     @Column(name = "ticket_amount")
@@ -55,10 +57,12 @@ public class ParkingTicket {
 
     @CreationTimestamp
     @Column(name = "created")
+//    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime created;
 
     @UpdateTimestamp
     @Column(name = "updated")
+//    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime updated;
 
     public ParkingTicket(CreateParkingTicketRequestDTO createTicketRequestDTO) {

@@ -32,8 +32,10 @@ public class ParkingZone {
     private BigDecimal costPerHour;
 
     @CreationTimestamp
+//    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime created;
 
     @UpdateTimestamp
+//    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime updated;
 }

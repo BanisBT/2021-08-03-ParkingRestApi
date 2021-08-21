@@ -2,10 +2,12 @@ package com.tbarauskas.parkingrestapi.dto.parking.zone;
 
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
+@NoArgsConstructor
 public class ParkingZoneResponseDTO {
 
     private String zoneName;

@@ -1,6 +1,5 @@
 package com.tbarauskas.parkingrestapi.entity.parking.city;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,8 +24,10 @@ public class ParkingCity {
     private String cityName;
 
     @CreationTimestamp
+//    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime created;
 
     @UpdateTimestamp
+//    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime updated;
 }

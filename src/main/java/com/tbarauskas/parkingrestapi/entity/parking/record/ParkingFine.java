@@ -1,6 +1,5 @@
 package com.tbarauskas.parkingrestapi.entity.parking.record;
 
-import com.tbarauskas.parkingrestapi.dto.parking.fine.CreateParkingFineRequestDTO;
 import com.tbarauskas.parkingrestapi.dto.parking.fine.UpdateParkingFineRequestDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.city.ParkingCity;
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
@@ -57,12 +56,21 @@ public class ParkingFine {
     @Column(name = "updated")
     private LocalDateTime updated;
 
-    public ParkingFine(CreateParkingFineRequestDTO createFineDTO) {
-        this.user = createFineDTO.getUser();
-        this.parkingCity = createFineDTO.getParkingCity();
-        this.parkingZone = createFineDTO.getParkingZone();
-        this.fineDateTime = createFineDTO.getFineDateTime();
+    public ParkingFine(User user, ParkingCity parkingCity, ParkingZone parkingZone, ParkingRecordStatus recordStatus,
+                       LocalDateTime fineDateTime) {
+        this.user = user;
+        this.parkingCity = parkingCity;
+        this.parkingZone = parkingZone;
+        this.recordStatus = recordStatus;
+        this.fineDateTime = fineDateTime;
     }
+
+    //    public ParkingFine(CreateParkingFineRequestDTO createFineDTO) {
+//        this.user = createFineDTO.getUser();
+//        this.parkingCity = createFineDTO.getParkingCity();
+//        this.parkingZone = createFineDTO.getParkingZone();
+//        this.fineDateTime = createFineDTO.getFineDateTime();
+//    }
 
     public ParkingFine(UpdateParkingFineRequestDTO updateFineDTO) {
         this.id = updateFineDTO.getId();

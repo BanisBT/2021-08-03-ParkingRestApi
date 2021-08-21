@@ -1,11 +1,13 @@
 package com.tbarauskas.parkingrestapi.controller;
 
+import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineResponseDTO;
 import com.tbarauskas.parkingrestapi.dto.user.CreateUserRequestDTO;
 import com.tbarauskas.parkingrestapi.dto.user.UserResponseDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.service.UserService;
+import com.tbarauskas.parkingrestapi.service.parking.ParkingFineService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,8 +23,11 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private final ParkingFineService fineService;
+
+    public UserController(UserService userService, ParkingFineService fineService) {
         this.userService = userService;
+        this.fineService = fineService;
     }
 
     @GetMapping("/{id}")

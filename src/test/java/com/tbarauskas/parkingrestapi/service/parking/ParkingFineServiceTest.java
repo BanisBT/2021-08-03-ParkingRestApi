@@ -94,13 +94,6 @@ class ParkingFineServiceTest {
     }
 
     @Test
-    void testCreateFine() {
-        fineService.createFine(fine);
-
-        verify(fineRepository, times(1)).save(fine);
-    }
-
-    @Test
     void testUpdateFine() {
         when(fineRepository.getParkingFineById(fine.getId())).thenReturn(Optional.of(fine));
 
@@ -152,5 +145,10 @@ class ParkingFineServiceTest {
 
     @Test
     void getUsersFinesByStatus() {
+    }
+
+    @Test
+    void createFine() {
+
     }
 }

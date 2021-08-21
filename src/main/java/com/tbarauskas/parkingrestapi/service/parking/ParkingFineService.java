@@ -1,7 +1,9 @@
 package com.tbarauskas.parkingrestapi.service.parking;
 
+import com.tbarauskas.parkingrestapi.entity.parking.city.ParkingCity;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
+import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.exceptsion.InvalidArgumentException;
 import com.tbarauskas.parkingrestapi.exceptsion.ParkingRecordHasNotUserException;
@@ -13,6 +15,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.tbarauskas.parkingrestapi.model.ParkingStatusName.UNPAID;
+
 @Service
 public class ParkingFineService {
 
@@ -20,9 +24,16 @@ public class ParkingFineService {
 
     private final ParkingRecordStatusService statusService;
 
-    public ParkingFineService(ParkingFineRepository fineRepository, ParkingRecordStatusService statusService) {
+    private final ParkingCityService cityService;
+
+    private final ParkingZoneService zoneService;
+
+    public ParkingFineService(ParkingFineRepository fineRepository, ParkingRecordStatusService statusService,
+                              ParkingCityService cityService, ParkingZoneService zoneService) {
         this.fineRepository = fineRepository;
         this.statusService = statusService;
+        this.cityService = cityService;
+        this.zoneService = zoneService;
     }
 
     public ParkingFine getFine(Long id) {
@@ -40,8 +51,13 @@ public class ParkingFineService {
         return fineRepository.getParkingFinesByFineDateTimeBetween(dateFrom, dateTo);
     }
 
-    public ParkingFine createFine(ParkingFine parkingFine) {
-        return fineRepository.save(parkingFine);
+    public ParkingFine createFine(User user, String cityName, String zoneName) {
+        LocalDateTime now = LocalDateTime.now();
+        ParkingCity city = cityService.getCity(cityName);
+        ParkingZone zone = zoneService.getZone(zoneName);
+        ParkingRecordStatus unpaid = statusService.getStatus(UNPAID.name());
+
+        return fineRepository.save(new ParkingFine(user, city, zone, unpaid, now));
     }
 
     public ParkingFine updateFine(Long id, ParkingFine updateParkingFine) {

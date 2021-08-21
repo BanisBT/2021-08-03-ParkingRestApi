@@ -1,10 +1,10 @@
 package com.tbarauskas.parkingrestapi.controller;
 
-import com.tbarauskas.parkingrestapi.dto.parking.fine.CreateParkingFineRequestDTO;
 import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineResponseDTO;
 import com.tbarauskas.parkingrestapi.dto.parking.fine.UpdateParkingFineRequestDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.user.User;
+import com.tbarauskas.parkingrestapi.service.UserService;
 import com.tbarauskas.parkingrestapi.service.parking.ParkingFineService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +25,11 @@ public class ParkingFineController {
 
     private final ParkingFineService fineService;
 
-    public ParkingFineController(ParkingFineService fineService) {
+    private final UserService userService;
+
+    public ParkingFineController(ParkingFineService fineService, UserService userService) {
         this.fineService = fineService;
+        this.userService = userService;
     }
 
     @ApiOperation(value = "Get parking fine", tags = "getFine", httpMethod = "GET")
@@ -37,8 +40,8 @@ public class ParkingFineController {
             @ApiResponse(code = 404, message = "ParkingFine not found"),
     })
     @GetMapping("{id}")
-    public ParkingFine getFine(@PathVariable Long id) {
-        return fineService.getFine(id);
+    public ParkingFineResponseDTO getFine(@PathVariable Long id) {
+        return new ParkingFineResponseDTO(fineService.getFine(id));
     }
 
     @GetMapping("{id}/user")
@@ -55,15 +58,8 @@ public class ParkingFineController {
         return fineService.getFines(dateFrom, dateTo);
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ParkingFineResponseDTO createFine(@Valid @RequestBody CreateParkingFineRequestDTO fineRequestDTO) {
-        ParkingFine parkingFine = fineService.createFine(new ParkingFine(fineRequestDTO));
-        log.debug("ParkingFine - {} has been successfully created", parkingFine);
-        return new ParkingFineResponseDTO(parkingFine);
-    }
-
     @PatchMapping("/{id}/setStatus/{status}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void setFineStatus(@PathVariable Long id, @PathVariable(name = "status") String fineStatus) {
         log.debug("Parking fine's - {} status was changed to - {}", fineService.getFine(id), fineStatus);
         fineService.setFineStatus(id, fineStatus);
@@ -82,6 +78,17 @@ public class ParkingFineController {
                                              @RequestBody UpdateParkingFineRequestDTO updateFineDTO) {
         ParkingFine parkingFine = fineService.updateFine(id, new ParkingFine(updateFineDTO));
         log.debug("ParkingFine - {} has been successfully updated", parkingFine);
+        return new ParkingFineResponseDTO(parkingFine);
+    }
+
+    @PostMapping("/{userId}/{city}/{zone}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ParkingFineResponseDTO createFine(@PathVariable(name = "userId") Long userId,
+                                             @PathVariable(name = "city") String cityName,
+                                             @PathVariable(name = "zone") String zoneName) {
+        User userFromDb = userService.getUser(userId);
+        ParkingFine parkingFine = fineService.createFine(userFromDb, cityName, zoneName);
+        log.debug("ParkingFine - {} has been successfully created", parkingFine);
         return new ParkingFineResponseDTO(parkingFine);
     }
 

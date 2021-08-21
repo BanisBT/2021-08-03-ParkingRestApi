@@ -1,7 +1,6 @@
 package com.tbarauskas.parkingrestapi.service.parking;
 
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
-import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.exceptsion.InvalidArgumentException;
 import com.tbarauskas.parkingrestapi.exceptsion.ParkingRecordHasNotUserException;
 import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
@@ -91,16 +90,6 @@ class ParkingFineServiceTest {
 
         verify(fineRepository, times(1)).getParkingFinesByFineDateTimeBetween(now, nowPlus);
         assertFalse(fines.isEmpty());
-    }
-
-    @Test
-    void testUpdateFine() {
-        when(fineRepository.getParkingFineById(fine.getId())).thenReturn(Optional.of(fine));
-
-        fineService.updateFine(fine.getId(), fine);
-
-        verify(fineRepository, times(1)).getParkingFineById(fine.getId());
-        verify(fineRepository, times(1)).save(fine);
     }
 
     @Test

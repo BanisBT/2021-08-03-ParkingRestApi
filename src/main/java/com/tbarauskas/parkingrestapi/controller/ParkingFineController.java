@@ -2,6 +2,7 @@ package com.tbarauskas.parkingrestapi.controller;
 
 import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineResponseDTO;
 import com.tbarauskas.parkingrestapi.dto.parking.fine.UpdateParkingFineRequestDTO;
+import com.tbarauskas.parkingrestapi.dto.user.UserResponseDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.service.UserService;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -45,17 +47,20 @@ public class ParkingFineController {
     }
 
     @GetMapping("{id}/user")
-    public User getFinesUser(@PathVariable Long id) {
-        return fineService.getFinesUser(id);
+    public UserResponseDTO getFinesUser(@PathVariable Long id) {
+        return new UserResponseDTO(fineService.getFinesUser(id));
     }
 
     @GetMapping()
-    public List<ParkingFine> getFines(@ApiParam(value = "Date and time from searching parking fine", example = "2021-04-09T11:00:00")
+    public List<ParkingFineResponseDTO> getFines(@ApiParam(value = "Date and time from searching parking fine",
+            example = "2021-04-09T11:00:00")
                                       @RequestParam(required = false, value = "from")
                                       @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime dateFrom,
                                       @RequestParam(required = false, value = "to")
                                       @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime dateTo) {
-        return fineService.getFines(dateFrom, dateTo);
+        return fineService.getFines(dateFrom, dateTo).stream()
+                .map(ParkingFineResponseDTO::new)
+                .collect(Collectors.toList());
     }
 
     @PatchMapping("/{id}/setStatus/{status}")
@@ -76,7 +81,7 @@ public class ParkingFineController {
     @PutMapping("/{id}")
     public ParkingFineResponseDTO updateFine(@Valid @PathVariable Long id,
                                              @RequestBody UpdateParkingFineRequestDTO updateFineDTO) {
-        ParkingFine parkingFine = fineService.updateFine(id, new ParkingFine(updateFineDTO));
+        ParkingFine parkingFine = fineService.updateFine(id, updateFineDTO);
         log.debug("ParkingFine - {} has been successfully updated", parkingFine);
         return new ParkingFineResponseDTO(parkingFine);
     }

@@ -1,19 +1,18 @@
 package com.tbarauskas.parkingrestapi.controller;
 
 import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineResponseDTO;
-import com.tbarauskas.parkingrestapi.dto.user.CreateUserRequestDTO;
+import com.tbarauskas.parkingrestapi.dto.parking.ticket.ParkingTicketResponseDTO;
+import com.tbarauskas.parkingrestapi.dto.user.UserRequestDTO;
 import com.tbarauskas.parkingrestapi.dto.user.UserResponseDTO;
-import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
-import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.service.UserService;
-import com.tbarauskas.parkingrestapi.service.parking.ParkingFineService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -23,41 +22,46 @@ public class UserController {
 
     private final UserService userService;
 
-    private final ParkingFineService fineService;
-
-    public UserController(UserService userService, ParkingFineService fineService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.fineService = fineService;
     }
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable Long id) {
-        return userService.getUser(id);
+    public UserResponseDTO getUser(@PathVariable Long id) {
+        return new UserResponseDTO(userService.getUser(id));
     }
 
     @GetMapping
-    public List<User> getUsers(@RequestParam(required = false, value = "search") String search) {
-        return userService.getUsers(search);
+    public List<UserResponseDTO> getUsers(@RequestParam(required = false, value = "search") String search) {
+        return userService.getUsers(search).stream()
+                .map(UserResponseDTO::new)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}/tickets")
-    public List<ParkingTicket> getUsersTickets(@PathVariable Long id) {
-        return userService.getUsersTickets(id);
+    public List<ParkingTicketResponseDTO> getUsersTickets(@PathVariable Long id) {
+        return userService.getUsersTickets(id).stream()
+                .map(ParkingTicketResponseDTO::new)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}/fines")
-    public List<ParkingFine> getUsersFines(@PathVariable Long id) {
-        return userService.getUsersFines(id);
+    public List<ParkingFineResponseDTO> getUsersFines(@PathVariable Long id) {
+        return userService.getUsersFines(id).stream()
+                .map(ParkingFineResponseDTO::new)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}/fines/unpaid")
-    public List<ParkingFine> getUsersUnpaidFines(@PathVariable Long id) {
-        return userService.getUsersUnpaidFines(id);
+    public List<ParkingFineResponseDTO> getUsersUnpaidFines(@PathVariable Long id) {
+        return userService.getUsersUnpaidFines(id).stream()
+                .map(ParkingFineResponseDTO::new)
+                .collect(Collectors.toList());
     }
 
     @PutMapping("/{id}")
-    public UserResponseDTO updateUser(@PathVariable Long id, @RequestBody CreateUserRequestDTO createUserRequestDTO) {
-        User user = userService.updateUser(id, new User(createUserRequestDTO));
+    public UserResponseDTO updateUser(@PathVariable Long id, @RequestBody UserRequestDTO userRequestDTO) {
+        User user = userService.updateUser(id, new User(userRequestDTO));
         log.debug("User - {} has been successfully updated", user);
         return new UserResponseDTO(user);
     }

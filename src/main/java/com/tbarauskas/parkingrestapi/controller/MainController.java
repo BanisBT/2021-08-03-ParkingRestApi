@@ -1,13 +1,12 @@
 package com.tbarauskas.parkingrestapi.controller;
 
-import com.tbarauskas.parkingrestapi.dto.user.CreateUserRequestDTO;
+import com.tbarauskas.parkingrestapi.dto.user.UserRequestDTO;
 import com.tbarauskas.parkingrestapi.dto.user.LoginUserResponseDTO;
 import com.tbarauskas.parkingrestapi.dto.user.UserResponseDTO;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.service.JwtService;
 import com.tbarauskas.parkingrestapi.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -37,8 +36,8 @@ public class MainController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponseDTO createUser(@Valid @RequestBody CreateUserRequestDTO createUserRequestDTO) {
-        User user = userService.createUser(new User(createUserRequestDTO));
+    public UserResponseDTO createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
+        User user = userService.createUser(new User(userRequestDTO));
         log.debug("User - {} has been successfully created", user);
         return new UserResponseDTO(user);
     }

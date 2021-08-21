@@ -1,9 +1,8 @@
 package com.tbarauskas.parkingrestapi.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tbarauskas.parkingrestapi.dto.user.CreateUserRequestDTO;
 import com.tbarauskas.parkingrestapi.dto.user.TokenUserDTO;
-import com.tbarauskas.parkingrestapi.dto.user.UpdateUserRequestDTO;
+import com.tbarauskas.parkingrestapi.dto.user.UserRequestDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import lombok.AllArgsConstructor;
@@ -73,21 +72,12 @@ public class User implements UserDetails {
     @Column(name = "updated")
     private LocalDateTime updated;
 
-    public User(CreateUserRequestDTO createUserDTO) {
+    public User(UserRequestDTO createUserDTO) {
         this.username = createUserDTO.getUsername();
         this.password = createUserDTO.getPassword();
         this.name = createUserDTO.getName();
         this.surname = createUserDTO.getSurname();
         this.carNumber = createUserDTO.getCarNumber();
-    }
-
-    public User(UpdateUserRequestDTO updateUserDTO) {
-        this.id = updateUserDTO.getId();
-        this.username = updateUserDTO.getUsername();
-        this.password = updateUserDTO.getPassword();
-        this.name = updateUserDTO.getName();
-        this.surname = updateUserDTO.getSurname();
-        this.carNumber = updateUserDTO.getCarNumber();
     }
 
     public User(TokenUserDTO tokenUserDTO) {

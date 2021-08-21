@@ -24,7 +24,11 @@ public class ParkingZoneService {
     }
 
     public ParkingZone getZoneById(Long id) {
-        return zoneRepository.getParkingZoneById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+        if (id == null) {
+            throw new InvalidArgumentException();
+        } else {
+            return zoneRepository.getParkingZoneById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+        }
     }
 
     public void setZoneFine(Long id, BigDecimal fineAmount) {

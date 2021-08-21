@@ -46,7 +46,8 @@ class ParkingFineControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        ParkingFine fine = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), ParkingFine.class);
+        ParkingFineResponseDTO fine = objectMapper.readValue(mvcResult.getResponse().getContentAsString(),
+                ParkingFineResponseDTO.class);
 
         assertEquals(1, fine.getId());
     }

@@ -1,6 +1,10 @@
 package com.tbarauskas.parkingrestapi.service.parking;
 
+import com.tbarauskas.parkingrestapi.dto.parking.ticket.UpdateParkingTicketRequestTDO;
+import com.tbarauskas.parkingrestapi.entity.parking.city.ParkingCity;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
+import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
+import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.exceptsion.UserHasOpenTicketException;
@@ -49,26 +53,35 @@ public class ParkingTicketService {
         return ticketRepository.getParkingTicketsByParkingBeganBetween(dateFrom, dateTo);
     }
 
-    public ParkingTicket createTicket(ParkingTicket parkingTicket, String cityName, String zoneName, User user) {
+//    TODO retest
+    public ParkingTicket createTicket(String cityName, String zoneName, User user) {
         ParkingTicket openTicket = getUsersOpenTicket(user);
+        ParkingTicket ticket = new ParkingTicket();
 
         if (openTicket == null) {
-            parkingTicket.setUser(userService.getUser(user.getId()));
-            parkingTicket.setParkingCity(cityService.getCity(cityName));
-            parkingTicket.setParkingZone(zoneService.getZone(zoneName));
-            parkingTicket.setRecordStatus(statusService.getStatus(ParkingStatusName.OPEN.toString()));
-            parkingTicket.setParkingBegan(LocalDateTime.now());
+            ticket.setUser(userService.getUser(user.getId()));
+            ticket.setParkingCity(cityService.getCity(cityName));
+            ticket.setParkingZone(zoneService.getZone(zoneName));
+            ticket.setRecordStatus(statusService.getStatus(ParkingStatusName.OPEN.toString()));
+            ticket.setParkingBegan(LocalDateTime.now());
 
-            return ticketRepository.save(parkingTicket);
+            return ticketRepository.save(ticket);
         } else {
             throw new UserHasOpenTicketException(openTicket);
         }
     }
 
-    public ParkingTicket updateTicket(Long id, ParkingTicket updateParkingTicket) {
-        ParkingTicket parkingTicket = getTicket(updateParkingTicket.getId());
-        updateParkingTicket.setCreated(parkingTicket.getCreated());
-        return ticketRepository.save(updateParkingTicket);
+//    TODO retest
+    public ParkingTicket updateTicket(Long id, UpdateParkingTicketRequestTDO ticket) {
+        ParkingRecordStatus status = statusService.getStatus(ticket.getRecordStatus());
+        ParkingCity city = cityService.getCity(ticket.getParkingCity());
+        ParkingZone zone = zoneService.getZone(ticket.getParkingZone());
+        ParkingTicket parkingTicket = getTicket(ticket.getId());
+
+        parkingTicket.setParkingZone(zone);
+        parkingTicket.setParkingCity(city);
+        parkingTicket.setRecordStatus(status);
+        return ticketRepository.save(parkingTicket);
     }
 
     public void deleteTicket(Long id) {

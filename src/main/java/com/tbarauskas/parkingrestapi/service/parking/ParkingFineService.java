@@ -1,5 +1,7 @@
 package com.tbarauskas.parkingrestapi.service.parking;
 
+import com.tbarauskas.parkingrestapi.dto.parking.fine.UpdateParkingFineRequestDTO;
+import com.tbarauskas.parkingrestapi.dto.parking.ticket.UpdateParkingTicketRequestTDO;
 import com.tbarauskas.parkingrestapi.entity.parking.city.ParkingCity;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
@@ -51,6 +53,7 @@ public class ParkingFineService {
         return fineRepository.getParkingFinesByFineDateTimeBetween(dateFrom, dateTo);
     }
 
+//    TODO Retest
     public ParkingFine createFine(User user, String cityName, String zoneName) {
         LocalDateTime now = LocalDateTime.now();
         ParkingCity city = cityService.getCity(cityName);
@@ -60,10 +63,17 @@ public class ParkingFineService {
         return fineRepository.save(new ParkingFine(user, city, zone, unpaid, now));
     }
 
-    public ParkingFine updateFine(Long id, ParkingFine updateParkingFine) {
-        ParkingFine parkingFine = getFine(updateParkingFine.getId());
-        updateParkingFine.setCreated(parkingFine.getCreated());
-        return fineRepository.save(updateParkingFine);
+//    TODO Retest
+    public ParkingFine updateFine(Long id, UpdateParkingFineRequestDTO fine) {
+        ParkingZone zone = zoneService.getZone(fine.getParkingZone());
+        ParkingCity city = cityService.getCity(fine.getParkingCity());
+        ParkingRecordStatus status = statusService.getStatus(fine.getRecordStatus());
+        ParkingFine parkingFine = getFine(fine.getId());
+
+        parkingFine.setRecordStatus(status);
+        parkingFine.setParkingCity(city);
+        parkingFine.setParkingZone(zone);
+        return fineRepository.save(parkingFine);
     }
 
     public void deleteFine(Long id) {

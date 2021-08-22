@@ -1,6 +1,7 @@
 package com.tbarauskas.parkingrestapi.service.parking;
 
-import com.tbarauskas.parkingrestapi.dto.parking.ticket.UpdateParkingTicketRequestTDO;
+import com.tbarauskas.parkingrestapi.dto.parking.ticket.ParkingTicketRequestCreateDTO;
+import com.tbarauskas.parkingrestapi.dto.parking.ticket.ParkingTicketRequestUpdateTDO;
 import com.tbarauskas.parkingrestapi.entity.parking.city.ParkingCity;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
@@ -54,14 +55,14 @@ public class ParkingTicketService {
     }
 
 //    TODO retest
-    public ParkingTicket createTicket(String cityName, String zoneName, User user) {
+    public ParkingTicket createTicket(User user, ParkingTicketRequestCreateDTO fine) {
         ParkingTicket openTicket = getUsersOpenTicket(user);
         ParkingTicket ticket = new ParkingTicket();
 
         if (openTicket == null) {
             ticket.setUser(userService.getUser(user.getId()));
-            ticket.setParkingCity(cityService.getCity(cityName));
-            ticket.setParkingZone(zoneService.getZone(zoneName));
+            ticket.setParkingCity(cityService.getCity(fine.getParkingCity()));
+            ticket.setParkingZone(zoneService.getZone(fine.getParkingZone()));
             ticket.setRecordStatus(statusService.getStatus(ParkingStatusName.OPEN.toString()));
             ticket.setParkingBegan(LocalDateTime.now());
 
@@ -72,7 +73,7 @@ public class ParkingTicketService {
     }
 
 //    TODO retest
-    public ParkingTicket updateTicket(Long id, UpdateParkingTicketRequestTDO ticket) {
+    public ParkingTicket updateTicket(Long id, ParkingTicketRequestUpdateTDO ticket) {
         ParkingRecordStatus status = statusService.getStatus(ticket.getRecordStatus());
         ParkingCity city = cityService.getCity(ticket.getParkingCity());
         ParkingZone zone = zoneService.getZone(ticket.getParkingZone());

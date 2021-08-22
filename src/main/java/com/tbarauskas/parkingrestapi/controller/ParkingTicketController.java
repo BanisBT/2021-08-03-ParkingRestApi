@@ -1,7 +1,8 @@
 package com.tbarauskas.parkingrestapi.controller;
 
+import com.tbarauskas.parkingrestapi.dto.parking.ticket.ParkingTicketRequestCreateDTO;
 import com.tbarauskas.parkingrestapi.dto.parking.ticket.ParkingTicketResponseDTO;
-import com.tbarauskas.parkingrestapi.dto.parking.ticket.UpdateParkingTicketRequestTDO;
+import com.tbarauskas.parkingrestapi.dto.parking.ticket.ParkingTicketRequestUpdateTDO;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.service.UserService;
@@ -55,19 +56,18 @@ public class ParkingTicketController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping("/{city}/{zone}")
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public ParkingTicketResponseDTO createTicket(@PathVariable(name = "city") String cityName,
-                                                 @PathVariable(name = "zone") String zoneName,
+    public ParkingTicketResponseDTO createTicket(@Valid @RequestBody ParkingTicketRequestCreateDTO ticketDTO,
                                                  @AuthenticationPrincipal User user) {
-        ParkingTicket parkingTicket = ticketService.createTicket(cityName, zoneName, user);
+        ParkingTicket parkingTicket = ticketService.createTicket(user, ticketDTO);
         log.debug("ParkingTicket - {} has been successfully created", parkingTicket);
         return new ParkingTicketResponseDTO(parkingTicket);
     }
 
     @PutMapping("/{id}")
     public ParkingTicketResponseDTO updateTicket(@PathVariable Long id,
-                                                 @Valid @RequestBody UpdateParkingTicketRequestTDO ticketRequestTDO) {
+                                                 @Valid @RequestBody ParkingTicketRequestUpdateTDO ticketRequestTDO) {
         ParkingTicket parkingTicket = ticketService.updateTicket(id, ticketRequestTDO);
         log.debug("ParkingTicket - {} has been successfully created", parkingTicket);
         return new ParkingTicketResponseDTO(parkingTicket);

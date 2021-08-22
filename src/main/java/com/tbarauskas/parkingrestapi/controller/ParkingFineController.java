@@ -1,7 +1,8 @@
 package com.tbarauskas.parkingrestapi.controller;
 
+import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineRequestCreateDTO;
 import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineResponseDTO;
-import com.tbarauskas.parkingrestapi.dto.parking.fine.UpdateParkingFineRequestDTO;
+import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineRequestUpdateDTO;
 import com.tbarauskas.parkingrestapi.dto.user.UserResponseDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.user.User;
@@ -64,7 +65,6 @@ public class ParkingFineController {
     }
 
     @PatchMapping("/{id}/setStatus/{status}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
     public void setFineStatus(@PathVariable Long id, @PathVariable(name = "status") String fineStatus) {
         log.debug("Parking fine's - {} status was changed to - {}", fineService.getFine(id), fineStatus);
         fineService.setFineStatus(id, fineStatus);
@@ -72,7 +72,6 @@ public class ParkingFineController {
 
 //    TODO http status response?
     @PatchMapping("/{id}/setFineAmount/{amount}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
     public void setFineAmount(@PathVariable Long id, @PathVariable(name = "amount")BigDecimal fineAmount) {
         log.debug("Parking fine's - {} amount changed to - {}", fineService.getFine(id), fineAmount);
         fineService.setFineAmount(id, fineAmount);
@@ -80,19 +79,17 @@ public class ParkingFineController {
 
     @PutMapping("/{id}")
     public ParkingFineResponseDTO updateFine(@Valid @PathVariable Long id,
-                                             @RequestBody UpdateParkingFineRequestDTO updateFineDTO) {
+                                             @RequestBody ParkingFineRequestUpdateDTO updateFineDTO) {
         ParkingFine parkingFine = fineService.updateFine(id, updateFineDTO);
         log.debug("ParkingFine - {} has been successfully updated", parkingFine);
         return new ParkingFineResponseDTO(parkingFine);
     }
 
-    @PostMapping("/{userId}/{city}/{zone}")
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public ParkingFineResponseDTO createFine(@PathVariable(name = "userId") Long userId,
-                                             @PathVariable(name = "city") String cityName,
-                                             @PathVariable(name = "zone") String zoneName) {
-        User userFromDb = userService.getUser(userId);
-        ParkingFine parkingFine = fineService.createFine(userFromDb, cityName, zoneName);
+    public ParkingFineResponseDTO createFine(@Valid @RequestBody ParkingFineRequestCreateDTO fineRequest) {
+        User userFromDb = userService.getUser(fineRequest.getUserId());
+        ParkingFine parkingFine = fineService.createFine(userFromDb, fineRequest);
         log.debug("ParkingFine - {} has been successfully created", parkingFine);
         return new ParkingFineResponseDTO(parkingFine);
     }

@@ -2,11 +2,13 @@ package com.tbarauskas.parkingrestapi.dto.parking.ticket;
 
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 public class ParkingTicketResponseDTO {
 
     private Long id;

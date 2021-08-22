@@ -26,10 +26,6 @@ public class ParkingFineResponseDTO {
 
     private BigDecimal fineAmount;
 
-    private LocalDateTime created;
-
-    private LocalDateTime updated;
-
     public ParkingFineResponseDTO(ParkingFine parkingFine) {
         this.id = parkingFine.getId();
         this.username = parkingFine.getUser().getUsername();
@@ -38,7 +34,5 @@ public class ParkingFineResponseDTO {
         this.recordStatus = parkingFine.getRecordStatus().getParkingStatusName();
         this.fineDateTime = parkingFine.getFineDateTime();
         this.fineAmount = parkingFine.getFineAmount();
-        this.created = parkingFine.getCreated();
-        this.updated = parkingFine.getUpdated();
     }
 }

@@ -138,6 +138,5 @@ class ParkingFineServiceTest {
 
     @Test
     void createFine() {
-
     }
 }

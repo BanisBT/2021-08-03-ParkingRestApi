@@ -1,7 +1,7 @@
 package com.tbarauskas.parkingrestapi.service.parking;
 
-import com.tbarauskas.parkingrestapi.dto.parking.fine.UpdateParkingFineRequestDTO;
-import com.tbarauskas.parkingrestapi.dto.parking.ticket.UpdateParkingTicketRequestTDO;
+import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineRequestCreateDTO;
+import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineRequestUpdateDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.city.ParkingCity;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
@@ -54,17 +54,17 @@ public class ParkingFineService {
     }
 
 //    TODO Retest
-    public ParkingFine createFine(User user, String cityName, String zoneName) {
+    public ParkingFine createFine(User user, ParkingFineRequestCreateDTO fine) {
         LocalDateTime now = LocalDateTime.now();
-        ParkingCity city = cityService.getCity(cityName);
-        ParkingZone zone = zoneService.getZone(zoneName);
+        ParkingCity city = cityService.getCity(fine.getParkingCity());
+        ParkingZone zone = zoneService.getZone(fine.getParkingZone());
         ParkingRecordStatus unpaid = statusService.getStatus(UNPAID.name());
 
         return fineRepository.save(new ParkingFine(user, city, zone, unpaid, now));
     }
 
 //    TODO Retest
-    public ParkingFine updateFine(Long id, UpdateParkingFineRequestDTO fine) {
+    public ParkingFine updateFine(Long id, ParkingFineRequestUpdateDTO fine) {
         ParkingZone zone = zoneService.getZone(fine.getParkingZone());
         ParkingCity city = cityService.getCity(fine.getParkingCity());
         ParkingRecordStatus status = statusService.getStatus(fine.getRecordStatus());

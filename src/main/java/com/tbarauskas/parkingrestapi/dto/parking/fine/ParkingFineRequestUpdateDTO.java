@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class UpdateParkingFineRequestDTO {
+public class ParkingFineRequestUpdateDTO {
 
     @NotNull
     @ApiModelProperty(notes = "Parking fine ID", required = true, name = "id", value = "1", example = "1")

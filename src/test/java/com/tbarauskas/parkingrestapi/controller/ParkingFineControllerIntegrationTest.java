@@ -1,6 +1,7 @@
 package com.tbarauskas.parkingrestapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineRequestCreateDTO;
 import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineResponseDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.model.Error;
@@ -10,19 +11,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDateTime;
 
+import static com.tbarauskas.parkingrestapi.model.ParkingCityName.KAUNAS;
 import static com.tbarauskas.parkingrestapi.model.ParkingStatusName.PAID;
-import static com.tbarauskas.parkingrestapi.model.ParkingZoneName.VILNIUS_BLUE_ZONE;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.tbarauskas.parkingrestapi.model.ParkingZoneName.KAUNAS_RED_ZONE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 
 @WithMockUser(roles = {"MANAGER", "REGULAR"})
 @AutoConfigureMockMvc
@@ -74,7 +76,11 @@ class ParkingFineControllerIntegrationTest {
 
     @Test
     void testCreateFine() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(post("/fines/1/VILNIUS/{zone}", VILNIUS_BLUE_ZONE.name()))
+        ParkingFineRequestCreateDTO fineDTO = new ParkingFineRequestCreateDTO(1L, KAUNAS.name(), KAUNAS_RED_ZONE.name());
+
+        MvcResult mvcResult = mockMvc.perform(post("/fines/create")
+                .content(objectMapper.writeValueAsString(fineDTO))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andReturn();
 
@@ -84,15 +90,19 @@ class ParkingFineControllerIntegrationTest {
         ParkingFine fine = fineRepository.getParkingFineById(fineResponse.getId()).orElse(null);
 
         assertEquals(fineResponse.getId(), fine.getId());
-        assertEquals(fineResponse.getRecordStatus(), fine.getRecordStatus().getParkingStatusName());
-        assertEquals(fineResponse.getParkingCity(), fine.getParkingCity().getCityName());
-        assertEquals(fineResponse.getParkingZone(), fine.getParkingZone().getZoneName());
+        assertEquals(fineDTO.getUserId(), fine.getUser().getId());
+        assertEquals(fineDTO.getParkingCity(), fine.getParkingCity().getCityName());
+        assertEquals(fineDTO.getParkingZone(), fine.getParkingZone().getZoneName());
         assertTrue(fine.getCreated().isAfter(now));
     }
 
     @Test
     void testCreateFineBadCityName() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(post("/fines/1/SIAULIAI/{zone}", VILNIUS_BLUE_ZONE.name()))
+        ParkingFineRequestCreateDTO fineDTO = new ParkingFineRequestCreateDTO(1L, KAUNAS.name(), "Not exist name");
+
+        MvcResult mvcResult = mockMvc.perform(post("/fines/create")
+                .content(objectMapper.writeValueAsString(fineDTO))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
                 .andReturn();
 
@@ -103,7 +113,11 @@ class ParkingFineControllerIntegrationTest {
 
     @Test
     void testCreateFineThenUserDontExist() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(post("/fines/100/VILNIUS/{zone}", VILNIUS_BLUE_ZONE.name()))
+        ParkingFineRequestCreateDTO fineDTO = new ParkingFineRequestCreateDTO(100L, KAUNAS.name(), KAUNAS_RED_ZONE.name());
+
+        MvcResult mvcResult = mockMvc.perform(post("/fines/create")
+                .content(objectMapper.writeValueAsString(fineDTO))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
 
@@ -127,7 +141,7 @@ class ParkingFineControllerIntegrationTest {
 
     @Test
     void testSetFineStatusNotExist() throws Exception {
-       MvcResult mvcResult = mockMvc.perform(patch("/fines/2/setStatus/{status}", "Not exist name"))
+        MvcResult mvcResult = mockMvc.perform(patch("/fines/2/setStatus/{status}", "Not exist name"))
                 .andExpect(status().isInternalServerError())
                 .andReturn();
 

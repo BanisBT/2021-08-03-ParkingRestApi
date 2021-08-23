@@ -5,6 +5,8 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 public class UserResponseDTO {
@@ -21,6 +23,8 @@ public class UserResponseDTO {
 
     private BigDecimal balance;
 
+    private Set<UserRoleResponseDTO> roles;
+
     private LocalDateTime profileCreated;
 
     public UserResponseDTO(User user) {
@@ -31,5 +35,6 @@ public class UserResponseDTO {
         this.carNumber = user.getCarNumber();
         this.balance = user.getBalance();
         this.profileCreated = user.getCreated();
+        this.roles = user.getRoles().stream().map(UserRoleResponseDTO::new).collect(Collectors.toSet());
     }
 }

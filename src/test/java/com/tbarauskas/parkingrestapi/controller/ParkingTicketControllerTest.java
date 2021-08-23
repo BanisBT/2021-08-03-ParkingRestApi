@@ -75,18 +75,8 @@ class ParkingTicketControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "Banis")
     void testCreateTicket() throws Exception {
-        User user = userRepository.getUserById(1L).orElse(null);
-        ParkingTicketRequestCreateDTO ticketRequest = new ParkingTicketRequestCreateDTO(VILNIUS.name(),
-                VILNIUS_GREEN_ZONE.name());
 
-        MvcResult mvcResult = mockMvc.perform(post("/tickets/create")
-                .content(objectMapper.writeValueAsString(ticketRequest))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
-        System.out.println("sdfghj");
     }
 
     @Test

@@ -53,9 +53,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UsernameAlreadyExistException.class)
     public ResponseEntity<Error> exceptionHandle(UsernameAlreadyExistException e) {
         log.debug("Username - {} already exist in db", e.getUsername());
-        return new ResponseEntity<>(new Error(HttpStatus.BAD_REQUEST.value(),
+        return new ResponseEntity<>(new Error(HttpStatus.CONFLICT.value(),
                 String.format("Username - %s already exist", e.getUsername())),
-                HttpStatus.BAD_REQUEST);
+                HttpStatus.CONFLICT);
 
     }
 

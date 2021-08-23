@@ -39,8 +39,6 @@ public class JwtService {
                 .setExpiration(new Date(now.getTime() + validity * 60000))
                 .setIssuedAt(now)
                 .claim("user", new TokenUserDTO(user))
-//                .claim("roles", user.getRoles().stream().map(UserRole::getAuthority).collect(Collectors.toSet()))
-//                .claim("userId", user.getId())
                 .signWith(Keys.hmacShaKeyFor(secret), SignatureAlgorithm.HS512)
                 .compact();
     }
@@ -62,10 +60,6 @@ public class JwtService {
         TokenUserDTO userDTO = objectMapper.readValue(objectMapper.writeValueAsString(parsedJwtBody.get("user")),
                 TokenUserDTO.class);
         User user = new User(userDTO);
-
-//        List<GrantedAuthority> roles = ((List<String>) parsedJwtBody.get("roles")).stream()
-//                .map(SimpleGrantedAuthority::new)
-//                .collect(Collectors.toList());
 
         return new UsernamePasswordAuthenticationToken(user, null, user.getRoles());
     }

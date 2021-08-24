@@ -7,15 +7,21 @@ import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
 import com.tbarauskas.parkingrestapi.entity.user.User;
+import com.tbarauskas.parkingrestapi.entity.user.UserRole;
 import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.exceptsion.UserHasOpenTicketException;
 import com.tbarauskas.parkingrestapi.model.ParkingStatusName;
 import com.tbarauskas.parkingrestapi.repository.ParkingTicketRepository;
 import com.tbarauskas.parkingrestapi.service.UserService;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.tbarauskas.parkingrestapi.model.UserRoleName.MANAGER;
 
 @Service
 public class ParkingTicketService {
@@ -40,7 +46,13 @@ public class ParkingTicketService {
     }
 
     public ParkingTicket getTicket(Long id) {
-        return ticketRepository.getParkingTicketById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ParkingTicket ticket = ticketRepository.getParkingTicketById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+
+        if ( user.isManager() || ticket.getUser().getId().equals(user.getId()) ) {
+            return ticket;
+        }
+        throw new AccessDeniedException("Access denied");
     }
 
     public List<ParkingTicket> getTickets(LocalDateTime dateFrom, LocalDateTime dateTo) {
@@ -73,7 +85,7 @@ public class ParkingTicketService {
     }
 
 //    TODO retest
-    public ParkingTicket updateTicket(Long id, ParkingTicketRequestUpdateTDO ticket) {
+    public ParkingTicket updateTicket(Long id, User user, ParkingTicketRequestUpdateTDO ticket) {
         ParkingRecordStatus status = statusService.getStatus(ticket.getRecordStatus());
         ParkingCity city = cityService.getCity(ticket.getParkingCity());
         ParkingZone zone = zoneService.getZone(ticket.getParkingZone());
@@ -85,15 +97,15 @@ public class ParkingTicketService {
         return ticketRepository.save(parkingTicket);
     }
 
-    public void deleteTicket(Long id) {
+    public void deleteTicket(Long id, User user) {
         ticketRepository.deleteById(getTicket(id).getId());
     }
 
-    public User getTicketsUser(Long id) {
+    public User getTicketsUser(Long id, User user) {
         return getTicket(id).getUser();
     }
 
-    public void setTicketsStatus(Long id, String statusName) {
+    public void setTicketsStatus(Long id, User user, String statusName) {
         ParkingTicket ticket = getTicket(id);
         ticket.setRecordStatus(statusService.getStatus(statusName));
         ticketRepository.save(ticket);

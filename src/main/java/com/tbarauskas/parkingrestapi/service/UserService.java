@@ -125,11 +125,6 @@ public class UserService implements UserDetailsService {
                     getUser(user.getId()));
         }
     }
-    private Set<Long> getUsersTicketsIDs(Long id) {
-        return getUsersTickets(id).stream()
-                .map(ParkingTicket::getId)
-                .collect(Collectors.toSet());
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

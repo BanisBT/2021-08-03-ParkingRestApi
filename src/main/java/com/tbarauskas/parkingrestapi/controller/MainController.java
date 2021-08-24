@@ -28,11 +28,8 @@ public class MainController {
     }
 
     @PostMapping("/login")
-//    TODO verta toki status deti?
-    @ResponseStatus(HttpStatus.ACCEPTED)
     public LoginUserResponseDTO login(@AuthenticationPrincipal User user) {
-        LoginUserResponseDTO login = new LoginUserResponseDTO(jwtService.createToken(user), new UserResponseDTO(user));
-        return login;
+        return new LoginUserResponseDTO(jwtService.createToken(user), new UserResponseDTO(user));
     }
 
     @PostMapping("/register")

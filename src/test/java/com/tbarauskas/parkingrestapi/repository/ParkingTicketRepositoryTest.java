@@ -67,7 +67,7 @@ class ParkingTicketRepositoryTest {
     void testGetParkingTicketByUserAndRecordStatus() {
         ParkingRecordStatus open = statusRepository.getParkingRecordStatusByParkingStatusName(OPEN.name())
                 .orElse(null);
-        User user = userRepository.getById(2L);
+        User user = userRepository.getById(1L);
 
         ParkingTicket ticket = ticketRepository.getParkingTicketByUserAndRecordStatus(user, open).orElse(null);
 

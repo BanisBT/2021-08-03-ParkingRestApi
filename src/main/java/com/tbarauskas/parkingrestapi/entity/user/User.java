@@ -19,6 +19,9 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import static com.tbarauskas.parkingrestapi.model.UserRoleName.MANAGER;
 
 @Data
 @AllArgsConstructor
@@ -113,5 +116,12 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public boolean isManager() {
+        return roles.stream()
+                .map(UserRole::getUserRole)
+                .collect(Collectors.toSet())
+                .contains(MANAGER.name());
     }
 }

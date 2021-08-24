@@ -1,5 +1,7 @@
 package com.tbarauskas.parkingrestapi.controller;
 
+import com.tbarauskas.parkingrestapi.dto.parking.ParkingRecordAmountRequestDTO;
+import com.tbarauskas.parkingrestapi.dto.parking.ParkingStatusRequestDTO;
 import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineRequestCreateDTO;
 import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineResponseDTO;
 import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineRequestUpdateDTO;
@@ -16,7 +18,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,17 +67,16 @@ public class ParkingFineController {
                 .collect(Collectors.toList());
     }
 
-    @PatchMapping("/{id}/setStatus/{status}")
-    public void setFineStatus(@PathVariable Long id, @PathVariable(name = "status") String fineStatus) {
-        log.debug("Parking fine's - {} status was changed to - {}", fineService.getFine(id), fineStatus);
-        fineService.setFineStatus(id, fineStatus);
+    @PatchMapping("/{id}/setStatus")
+    public void setFineStatus(@PathVariable Long id, @Valid @RequestBody ParkingStatusRequestDTO fineStatus) {
+        log.debug("Parking fine's - {} status was changed to - {}", fineService.getFine(id), fineStatus.getStatusName());
+        fineService.setFineStatus(id, fineStatus.getStatusName());
     }
 
-//    TODO http status response?
-    @PatchMapping("/{id}/setFineAmount/{amount}")
-    public void setFineAmount(@PathVariable Long id, @PathVariable(name = "amount")BigDecimal fineAmount) {
-        log.debug("Parking fine's - {} amount changed to - {}", fineService.getFine(id), fineAmount);
-        fineService.setFineAmount(id, fineAmount);
+    @PatchMapping("/{id}/setFineAmount")
+    public void setFineAmount(@PathVariable Long id, @Valid @RequestBody ParkingRecordAmountRequestDTO fineAmount) {
+        log.debug("Parking fine's - {} amount changed to - {}", fineService.getFine(id), fineAmount.getAmount());
+        fineService.setFineAmount(id, fineAmount.getAmount());
     }
 
     @PutMapping("/{id}")

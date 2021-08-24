@@ -20,7 +20,6 @@ class ParkingCityRepositoryTest {
     public void testGetParkingCityByCityName() {
         ParkingCity parkingCity = cityRepository.getParkingCityByCityName(VILNIUS.name()).orElse(null);
 
-        System.out.println("gsdg");
         assert parkingCity != null;
         assertEquals(1, parkingCity.getId());
         assertEquals(VILNIUS.toString(), parkingCity.getCityName());

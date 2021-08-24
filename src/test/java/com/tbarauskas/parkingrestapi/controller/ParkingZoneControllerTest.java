@@ -1,7 +1,7 @@
 package com.tbarauskas.parkingrestapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tbarauskas.parkingrestapi.dto.parking.zone.ParkingZoneResponseDTO;
+import com.tbarauskas.parkingrestapi.dto.parking.ParkingZoneResponseDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
 import com.tbarauskas.parkingrestapi.model.Error;
 import com.tbarauskas.parkingrestapi.repository.ParkingZoneRepository;

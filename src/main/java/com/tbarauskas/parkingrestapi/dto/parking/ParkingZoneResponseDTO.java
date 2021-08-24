@@ -1,4 +1,4 @@
-package com.tbarauskas.parkingrestapi.dto.parking.zone;
+package com.tbarauskas.parkingrestapi.dto.parking;
 
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
 import lombok.Data;

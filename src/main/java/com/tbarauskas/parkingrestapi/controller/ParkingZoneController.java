@@ -1,13 +1,12 @@
 package com.tbarauskas.parkingrestapi.controller;
 
-import com.tbarauskas.parkingrestapi.dto.parking.zone.ParkingZoneResponseDTO;
+import com.tbarauskas.parkingrestapi.dto.parking.ParkingZoneResponseDTO;
 import com.tbarauskas.parkingrestapi.service.parking.ParkingZoneService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;

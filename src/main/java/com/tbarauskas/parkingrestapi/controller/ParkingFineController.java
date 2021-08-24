@@ -12,6 +12,7 @@ import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -42,6 +43,7 @@ public class ParkingFineController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "ParkingFine not found"),
     })
+    @PreAuthorize("hasRole('MANAGER')")
     @GetMapping("{id}")
     public ParkingFineResponseDTO getFine(@PathVariable Long id) {
         return new ParkingFineResponseDTO(fineService.getFine(id));

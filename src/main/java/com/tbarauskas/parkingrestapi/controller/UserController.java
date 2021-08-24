@@ -9,6 +9,7 @@ import com.tbarauskas.parkingrestapi.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,11 +28,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('MANAGER') || principal.id == #id")
     public UserResponseDTO getUser(@PathVariable Long id) {
         return new UserResponseDTO(userService.getUser(id));
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('MANAGER')")
     public List<UserResponseDTO> getUsers(@RequestParam(required = false, value = "search") String search) {
         return userService.getUsers(search).stream()
                 .map(UserResponseDTO::new)

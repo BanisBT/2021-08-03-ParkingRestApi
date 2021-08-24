@@ -113,7 +113,7 @@ INSERT INTO user_table (username, password, name, surname, car_number, balance)
 VALUES ('Banis', '{bcrypt}$2a$10$WJvAKW5R1VM2SSaAWf0WYO/FBcovz6X3BpulRoS2FWdUbcCZPo8V2', 'Tomas', 'Barauskas',
         'XXX 777', 100),
        ('Algelis', 'Blogas', 'Algis', 'Pavardenis', 'YYY 888', 700),
-       ('Admin', 'Admin123', 'Admin', 'Admin', 'X', 1),
+       ('Admin', '{bcrypt}$2a$10$WJvAKW5R1VM2SSaAWf0WYO/FBcovz6X3BpulRoS2FWdUbcCZPo8V2', 'Admin', 'Admin', 'X', 1),
        ('Saule', 'Saule', 'Laima', 'Pavasaraite', 'SSS 666', 600),
        ('Maxima', 'Daug', 'Kasa', 'Savitarna', 'MMM 111', 1000);
 

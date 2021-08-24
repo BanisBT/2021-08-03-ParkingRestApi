@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WithMockUser(roles = {"MANAGER", "REGULAR"})
+//@WithMockUser(roles = {"MANAGER", "REGULAR"})
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ParkingFineControllerIntegrationTest {
@@ -43,6 +44,7 @@ class ParkingFineControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Test
+    @WithUserDetails("Admin")
     void testGetFine() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/fines/{id}", 1L))
                 .andExpect(status().isOk())

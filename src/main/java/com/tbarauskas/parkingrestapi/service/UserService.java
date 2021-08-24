@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.tbarauskas.parkingrestapi.model.ParkingStatusName.PAID;
 import static com.tbarauskas.parkingrestapi.model.ParkingStatusName.UNPAID;
@@ -123,6 +124,11 @@ public class UserService implements UserDetailsService {
             throw new NotEnoughMoneyToPayForParkingRecordException(user.getBalance().subtract(fineAmount),
                     getUser(user.getId()));
         }
+    }
+    private Set<Long> getUsersTicketsIDs(Long id) {
+        return getUsersTickets(id).stream()
+                .map(ParkingTicket::getId)
+                .collect(Collectors.toSet());
     }
 
     @Override

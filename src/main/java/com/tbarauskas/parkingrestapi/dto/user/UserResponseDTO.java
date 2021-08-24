@@ -2,6 +2,7 @@ package com.tbarauskas.parkingrestapi.dto.user;
 
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
+@NoArgsConstructor
 public class UserResponseDTO {
 
     private Long id;

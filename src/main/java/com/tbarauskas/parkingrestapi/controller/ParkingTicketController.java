@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -35,6 +36,8 @@ public class ParkingTicketController {
         this.userService = userService;
     }
 
+//    @PreAuthorize("hasRole('MANAGER') || (userService.getUsersTickets(principal.id).contains(#id))")
+//    @PreAuthorize("hasRole('MANAGER') || (userService.getUsersTicketsIDs(principal.id).contains(#id))")
     @PreAuthorize("hasRole('MANAGER')")
     @GetMapping("/{id}")
     public ParkingTicketResponseDTO getTicket(@PathVariable Long id) {
@@ -74,7 +77,7 @@ public class ParkingTicketController {
     }
 
     @PatchMapping("/{id}/{status}")
-    public void changeFineStatus(@PathVariable Long id, @PathVariable(name = "status") String ticketStatus) {
+    public void setFineStatus(@PathVariable Long id, @PathVariable(name = "status") String ticketStatus) {
         log.debug("Parking ticket's - {} status was changed to - {}", ticketService.getTicket(id), ticketStatus);
         ticketService.setTicketsStatus(id, ticketStatus);
     }

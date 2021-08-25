@@ -1,6 +1,7 @@
 package com.tbarauskas.parkingrestapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tbarauskas.parkingrestapi.dto.parking.ParkingStatusRequestDTO;
 import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineRequestCreateDTO;
 import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineResponseDTO;
 import com.tbarauskas.parkingrestapi.dto.user.UserResponseDTO;
@@ -133,7 +134,7 @@ class ParkingFineControllerIntegrationTest {
     @WithUserDetails("Maxima")
     void testGetFinesUserNotManager() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/fines/{id}/user", 1L))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isForbidden())
                 .andReturn();
 
         Error error = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Error.class);
@@ -146,6 +147,7 @@ class ParkingFineControllerIntegrationTest {
     }
 
     @Test
+    @WithUserDetails("Admin")
     void testCreateFine() throws Exception {
         ParkingFineRequestCreateDTO fineDTO = new ParkingFineRequestCreateDTO(1L, KAUNAS.name(), KAUNAS_RED_ZONE.name());
 
@@ -168,6 +170,7 @@ class ParkingFineControllerIntegrationTest {
     }
 
     @Test
+    @WithUserDetails("Admin")
     void testCreateFineBadCityName() throws Exception {
         ParkingFineRequestCreateDTO fineDTO = new ParkingFineRequestCreateDTO(1L, KAUNAS.name(), "Not exist name");
 
@@ -183,6 +186,7 @@ class ParkingFineControllerIntegrationTest {
     }
 
     @Test
+    @WithUserDetails("Admin")
     void testCreateFineThenUserDontExist() throws Exception {
         ParkingFineRequestCreateDTO fineDTO = new ParkingFineRequestCreateDTO(100L, KAUNAS.name(), KAUNAS_RED_ZONE.name());
 
@@ -199,9 +203,14 @@ class ParkingFineControllerIntegrationTest {
     }
 
     @Test
+    @WithUserDetails("Admin")
     void testSetFineStatus() throws Exception {
-        mockMvc.perform(patch("/fines/2/setStatus/{status}", PAID.name()))
-                .andExpect(status().isAccepted())
+        ParkingStatusRequestDTO requestDTO = new ParkingStatusRequestDTO(PAID.name());
+
+        mockMvc.perform(patch("/fines/{id}/setStatus", 2L)
+                .content(objectMapper.writeValueAsString(requestDTO))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andReturn();
 
         ParkingFine fineUnpaid = fineRepository.getParkingFineById(2L).orElse(null);
@@ -211,8 +220,13 @@ class ParkingFineControllerIntegrationTest {
     }
 
     @Test
+    @WithUserDetails("Admin")
     void testSetFineStatusNotExist() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(patch("/fines/2/setStatus/{status}", "Not exist name"))
+        ParkingStatusRequestDTO requestDTO = new ParkingStatusRequestDTO("Not exist name");
+
+        MvcResult mvcResult = mockMvc.perform(patch("/fines/{id}/setStatus", 2L)
+                .content(objectMapper.writeValueAsString(requestDTO))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
                 .andReturn();
 
@@ -221,8 +235,8 @@ class ParkingFineControllerIntegrationTest {
         assertEquals(500, error.getStatus());
     }
 
-    @WithUserDetails("Banis")
     @Test
+    @WithUserDetails("Banis")
     void testSetFineStatusPayInsufficientFunds() throws Exception {
         MvcResult mvcResult = mockMvc.perform(patch("/fines/{id}/pay", 2L))
                 .andExpect(status().isBadRequest())
@@ -240,8 +254,8 @@ class ParkingFineControllerIntegrationTest {
         assertEquals("100.00", user.getBalance().toString());
     }
 
-    @WithUserDetails("Banis")
     @Test
+    @WithUserDetails("Banis")
     void testSetFineStatusPay() throws Exception {
         mockMvc.perform(patch("/fines/{id}/pay", 1L))
                 .andExpect(status().isOk())

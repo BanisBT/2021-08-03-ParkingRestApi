@@ -1,0 +1,629 @@
+{
+	"info": {
+		"_postman_id": "ad2bb6f0-49bc-4338-be7e-71ee3fef8db7",
+		"name": "ParkingRestApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ParkingFine",
+			"item": [
+				{
+					"name": "createParkingFine",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJwYXJraW5nLWFwaSIsImF1ZCI6InBhcmtpbmctdWkiLCJzdWIiOiJCYW5pcyIsImV4cCI6MTYyOTYzMDQ2NywiaWF0IjoxNjI5NjI0NDY3LCJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6IkJhbmlzIiwibmFtZSI6IlRvbWFzIiwic3VybmFtZSI6IkJhcmF1c2thcyIsImNhck51bWJlciI6IlhYWCA3NzciLCJyb2xlcyI6W3siaWQiOjEsInVzZXJSb2xlIjoiUkVHVUxBUiIsImNyZWF0ZWQiOm51bGwsInVwZGF0ZWQiOm51bGwsImF1dGhvcml0eSI6IlJPTEVfUkVHVUxBUiJ9XX19.gdgdtGyDygeynKrVWktTGhwd1kQ9cKecoal2pvvoO_5bS8krW088WyZKBKharxfb9bvH7IBFcqlY_BlCfSK1Lw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 1,\n    \"parkingCity\": \"KAUNAS\",\n    \"parkingZone\": \"KAUNAS_BLUE_ZONE\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/fines/create",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"fines",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateParkingFine",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"user\": null,\n    \"parkingCity\": null,\n    \"parkingZone\": null,\n    \"recordStatus\": null,\n    \"fineDateTime\": \"2021-04-05T00:00:00\",\n    \"fineAmount\": 700.00\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/fines/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"fines",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getParkingFine",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJwYXJraW5nLWFwaSIsImF1ZCI6InBhcmtpbmctdWkiLCJzdWIiOiJCYW5pcyIsImV4cCI6MTYyOTYzMDQ2NywiaWF0IjoxNjI5NjI0NDY3LCJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6IkJhbmlzIiwibmFtZSI6IlRvbWFzIiwic3VybmFtZSI6IkJhcmF1c2thcyIsImNhck51bWJlciI6IlhYWCA3NzciLCJyb2xlcyI6W3siaWQiOjEsInVzZXJSb2xlIjoiUkVHVUxBUiIsImNyZWF0ZWQiOm51bGwsInVwZGF0ZWQiOm51bGwsImF1dGhvcml0eSI6IlJPTEVfUkVHVUxBUiJ9XX19.gdgdtGyDygeynKrVWktTGhwd1kQ9cKecoal2pvvoO_5bS8krW088WyZKBKharxfb9bvH7IBFcqlY_BlCfSK1Lw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/fines/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"fines",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "setParkingFineStatus",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/fines/1/setStatus/OPEN",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"fines",
+								"1",
+								"setStatus",
+								"OPEN"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "setParkingFineAmount",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/fines/1/setAmount/111.00",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"fines",
+								"1",
+								"setAmount",
+								"111.00"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteParkingFine",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/fines/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"fines",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getParkingFines",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/fines",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"fines"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "updateUser",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"1\",\n    \"username\": \"Test\",\n    \"password\": \"Password\",\n    \"name\": \"TomasTest\",\n    \"surname\": \"BarauskasTest\",\n    \"carNumber\": \"YYY 888\",\n    \"balance\": 10\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/users/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\n    {\n    \"username\": \"Testas\",\n    \"password\": \"TestasGeras\",\n    \"name\": \"AlgisAudrius\",\n    \"surname\": \"PavardenisTest\",\n    \"carNumber\": \"YYY 888\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/users?search=sa",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "sa"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteUser",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/users/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ParkingTicket",
+			"item": [
+				{
+					"name": "createParkingTicket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJwYXJraW5nLWFwaSIsImF1ZCI6InBhcmtpbmctdWkiLCJzdWIiOiJCYW5pcyIsImV4cCI6MTYyOTY0ODAxNCwiaWF0IjoxNjI5NjQyMDE0LCJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6IkJhbmlzIiwibmFtZSI6IlRvbWFzIiwic3VybmFtZSI6IkJhcmF1c2thcyIsImNhck51bWJlciI6IlhYWCA3NzciLCJyb2xlcyI6W3siaWQiOjEsInVzZXJSb2xlIjoiUkVHVUxBUiIsImNyZWF0ZWQiOm51bGwsInVwZGF0ZWQiOm51bGwsImF1dGhvcml0eSI6IlJPTEVfUkVHVUxBUiJ9XX19.ITW5aj2gDyLSa8IihNYh243joOHv-VU5KMA3nHIG1K-WE2QR_EduY56W4bPTasGq_A21ipGYH_-ioViDnRDgVQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"parkingCity\": \"VILNIUS\",\n    \"parkingZone\": \"VILNIUS_BLUE_ZONE\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/tickets/create",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"tickets",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateParkingTicket",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"parkingBegan\": \"2021-08-04T17:25:28.389993\",\n    \"parkingEnd\": \"2021-08-04T19:25\",\n    \"ticketAmount\": 100\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/tickets",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getParkingTickets",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/tickets?to=2021-04-09T11:00:00",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"tickets"
+							],
+							"query": [
+								{
+									"key": "to",
+									"value": "2021-04-09T11:00:00"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getParkingTicket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/tickets/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"tickets",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteParkingTicket",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/tickets/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"tickets",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ParkingZone",
+			"item": [
+				{
+					"name": "getParkingZone",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJwYXJraW5nLWFwaSIsImF1ZCI6InBhcmtpbmctdWkiLCJzdWIiOiJCYW5pcyIsImV4cCI6MTYyOTU3NjYzMiwiaWF0IjoxNjI5NTcwNjMyLCJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6IkJhbmlzIiwibmFtZSI6IlRvbWFzIiwic3VybmFtZSI6IkJhcmF1c2thcyIsImNhck51bWJlciI6IlhYWCA3NzciLCJyb2xlcyI6W3siaWQiOjEsInVzZXJSb2xlIjoiUkVHVUxBUiIsImNyZWF0ZWQiOm51bGwsInVwZGF0ZWQiOm51bGwsImF1dGhvcml0eSI6IlJPTEVfUkVHVUxBUiJ9XX19.1_iKNpdsZrip_YZ336Hjp6wqPUJyJVlreitFoWJZKfxxz0mGL7r76lC2rza11KK1OZH2mluBugLLPmQAnezFxw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/zones/null",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"zones",
+								"null"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "setParkingZoneFine",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/zones/2/fineAmount/222",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"zones",
+								"2",
+								"fineAmount",
+								"222"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "setParkingZoneCostPerHour",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/zones/2/costPerHour/33",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"zones",
+								"2",
+								"costPerHour",
+								"33"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "File",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"Banis\",\n    \"password\":\"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

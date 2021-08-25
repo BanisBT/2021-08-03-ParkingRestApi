@@ -3,9 +3,12 @@ package com.tbarauskas.parkingrestapi.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineRequestCreateDTO;
 import com.tbarauskas.parkingrestapi.dto.parking.fine.ParkingFineResponseDTO;
+import com.tbarauskas.parkingrestapi.dto.user.UserResponseDTO;
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
+import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.model.Error;
 import com.tbarauskas.parkingrestapi.repository.ParkingFineRepository;
+import com.tbarauskas.parkingrestapi.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,17 +20,18 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static com.tbarauskas.parkingrestapi.model.ParkingCityName.KAUNAS;
 import static com.tbarauskas.parkingrestapi.model.ParkingStatusName.PAID;
+import static com.tbarauskas.parkingrestapi.model.ParkingStatusName.UNPAID;
 import static com.tbarauskas.parkingrestapi.model.ParkingZoneName.KAUNAS_RED_ZONE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@WithMockUser(roles = {"MANAGER", "REGULAR"})
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ParkingFineControllerIntegrationTest {
@@ -39,6 +43,9 @@ class ParkingFineControllerIntegrationTest {
 
     @Autowired
     private ParkingFineRepository fineRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -57,6 +64,33 @@ class ParkingFineControllerIntegrationTest {
     }
 
     @Test
+    @WithUserDetails("Banis")
+    void testGetFineThenOwnsIt() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/fines/{id}", 1L))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        ParkingFineResponseDTO fine = objectMapper.readValue(mvcResult.getResponse().getContentAsString(),
+                ParkingFineResponseDTO.class);
+
+        assertEquals(1, fine.getId());
+    }
+
+    @Test
+    @WithUserDetails("Maxima")
+    void testGetFineThenNotHisAndNotManager() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/fines/{id}", 1L))
+                .andExpect(status().isForbidden())
+                .andReturn();
+
+        Error error = objectMapper.readValue(mvcResult.getResponse().getContentAsString(),
+                Error.class);
+
+        assertEquals(403, error.getStatus());
+    }
+
+    @Test
+    @WithUserDetails("Admin")
     void testGetFineDoesNotExist() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/fines/{id}", 10L))
                 .andExpect(status().isNotFound())
@@ -69,7 +103,42 @@ class ParkingFineControllerIntegrationTest {
     }
 
     @Test
-    void getFinesUser() {
+    @WithUserDetails("Admin")
+    void testGetFinesUser() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/fines/{id}/user", 1L))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        UserResponseDTO user = objectMapper.readValue(mvcResult.getResponse().getContentAsString(),
+                UserResponseDTO.class);
+
+        assertEquals(1, user.getId());
+    }
+
+    @Test
+    @WithUserDetails("Admin")
+    void testGetFinesUserThenUserNotExist() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/fines/{id}/user", 5L))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        Error error = objectMapper.readValue(mvcResult.getResponse().getContentAsString(),
+                Error.class);
+
+        assertEquals(HttpStatus.NOT_FOUND.value(), error.getStatus());
+        assertEquals("Parking record don't has user", error.getMassage());
+    }
+
+    @Test
+    @WithUserDetails("Maxima")
+    void testGetFinesUserNotManager() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/fines/{id}/user", 1L))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        Error error = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Error.class);
+
+        assertEquals(403, error.getStatus());
     }
 
     @Test
@@ -150,6 +219,54 @@ class ParkingFineControllerIntegrationTest {
         Error error = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Error.class);
 
         assertEquals(500, error.getStatus());
+    }
+
+    @WithUserDetails("Banis")
+    @Test
+    void testSetFineStatusPayInsufficientFunds() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(patch("/fines/{id}/pay", 2L))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        Error error = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Error.class);
+        ParkingFine fine = fineRepository.getParkingFineById(2L).orElse(null);
+        User user = userRepository.getUserByUsername("Banis").orElse(null);
+
+        assertEquals(HttpStatus.BAD_REQUEST.value(), error.getStatus());
+        assertEquals("Insufficient funds, your balance after paying ticket would be -200.00", error.getMassage());
+        assert fine != null;
+        assertEquals(UNPAID.name(), fine.getRecordStatus().getParkingStatusName());
+        assert user != null;
+        assertEquals("100.00", user.getBalance().toString());
+    }
+
+    @WithUserDetails("Banis")
+    @Test
+    void testSetFineStatusPay() throws Exception {
+        mockMvc.perform(patch("/fines/{id}/pay", 1L))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        ParkingFine fine = fineRepository.getParkingFineById(1L).orElse(null);
+        User user = userRepository.getUserByUsername("Banis").orElse(null);
+
+        assert fine != null;
+        assertEquals(PAID.name(), fine.getRecordStatus().getParkingStatusName());
+        assert user != null;
+        assertEquals("0.00", user.getBalance().toString());
+    }
+
+    @Test
+    @WithUserDetails("Maxima")
+    void testSetFineStatusPayNotOwnerNotManager() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(patch("/fines/{id}/pay", 1L))
+                .andExpect(status().isForbidden())
+                .andReturn();
+
+        Error error = objectMapper.readValue(mvcResult.getResponse().getContentAsString(),
+                Error.class);
+
+        assertEquals(403, error.getStatus());
     }
 
     @Test

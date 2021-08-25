@@ -21,16 +21,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new Error(HttpStatus.NOT_FOUND.value(),
                 String.format("Resource with id %d - was not found", e.getId())), HttpStatus.NOT_FOUND);
     }
-//TODO koks statusas?
+
     @ExceptionHandler(NotEnoughMoneyToPayForParkingRecordException.class)
     public ResponseEntity<Error> exceptionHandle(NotEnoughMoneyToPayForParkingRecordException e) {
         log.debug("Not enough money to pay for parking ticket, user - {}", e.getUser());
-        return new ResponseEntity<>(new Error(HttpStatus.INSUFFICIENT_STORAGE.value(),
+        return new ResponseEntity<>(new Error(HttpStatus.BAD_REQUEST.value(),
                 String.format("Insufficient funds, your balance after paying ticket would be %s", e.getBalance())),
-                HttpStatus.INSUFFICIENT_STORAGE);
+                HttpStatus.BAD_REQUEST);
     }
 
-//    TODO patikrinti ar grista ticket'as
     @ExceptionHandler(UserHasOpenTicketException.class)
     public ResponseEntity<Error> exceptionHandle(UserHasOpenTicketException e) {
         return new ResponseEntity<>(new Error(HttpStatus.FORBIDDEN.value(), "You have open ticket"),
@@ -59,7 +58,6 @@ public class GlobalExceptionHandler {
 
     }
 
-//    TODO HttpStatusas?
     @ExceptionHandler(ParkingCityNotFoundException.class)
     public ResponseEntity<Error> exceptionHandle(ParkingCityNotFoundException e) {
         log.warn("Parking city - {} not found in data base, or bad request", e.getName());
@@ -67,15 +65,13 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
-//    TODO HttpStatus?
-    @ExceptionHandler(ParkingRecordHasNotUserException.class)
-    public ResponseEntity<Error> exceptionHandle(ParkingRecordHasNotUserException e) {
+    @ExceptionHandler(ParkingRecordHasNoUserException.class)
+    public ResponseEntity<Error> exceptionHandle(ParkingRecordHasNoUserException e) {
         log.warn("Parking record - {} don't has user", e.getId());
         return new ResponseEntity<>(new Error(HttpStatus.NOT_FOUND.value(), "Parking record don't has user"),
                 HttpStatus.NOT_FOUND);
     }
 
-    //    TODO HttpStatusas?
     @ExceptionHandler(ParkingZoneNotFoundException.class)
     public ResponseEntity<Error> exceptionHandle(ParkingZoneNotFoundException e) {
         log.warn("Parking zone - {} not found in data base, or bad request", e.getName());

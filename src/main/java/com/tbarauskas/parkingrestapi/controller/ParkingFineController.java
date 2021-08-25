@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -44,17 +45,25 @@ public class ParkingFineController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "ParkingFine not found"),
     })
-    @PreAuthorize("hasRole('MANAGER')")
     @GetMapping("{id}")
     public ParkingFineResponseDTO getFine(@PathVariable Long id) {
         return new ParkingFineResponseDTO(fineService.getFine(id));
     }
 
+    @ApiOperation(value = "Get parking fine's user", tags = "getFinesUser", httpMethod = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "ParkingFine not found"),
+    })
+    @PreAuthorize("hasRole('MANAGER')")
     @GetMapping("{id}/user")
     public UserResponseDTO getFinesUser(@PathVariable Long id) {
         return new UserResponseDTO(fineService.getFinesUser(id));
     }
 
+    @PreAuthorize("hasRole('MANAGER')")
     @GetMapping()
     public List<ParkingFineResponseDTO> getFines(@ApiParam(value = "Date and time from searching parking fine",
             example = "2021-04-09T11:00:00")
@@ -65,6 +74,13 @@ public class ParkingFineController {
         return fineService.getFines(dateFrom, dateTo).stream()
                 .map(ParkingFineResponseDTO::new)
                 .collect(Collectors.toList());
+    }
+
+    @PatchMapping("/{id}/pay")
+    public void setFineStatusPay(@PathVariable Long id, @AuthenticationPrincipal User user) {
+        log.debug("User - {} try to pay for parking fine - {}", user, fineService.getFine(id));
+        userService.isEnoughMoneyToPayForFine(user, id);
+
     }
 
     @PatchMapping("/{id}/setStatus")

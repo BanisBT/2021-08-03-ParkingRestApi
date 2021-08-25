@@ -75,9 +75,8 @@ class ParkingFineRepositoryTest {
         List<ParkingFine> fines = fineRepository.getParkingFinesByUserAndRecordStatus(user, paid);
         List<ParkingFine> finesUnpaid = fineRepository.getParkingFinesByUserAndRecordStatus(userUnpaid, unpaid);
 
-        assertEquals(1, fines.size());
-        assertEquals(3, finesUnpaid.size());
-        assertEquals(1L, fines.get(0).getId());
-        assertEquals(2L, finesUnpaid.get(0).getId());
+        assertEquals(0, fines.size());
+        assertEquals(1, finesUnpaid.size());
+        assertEquals(3L, finesUnpaid.get(0).getId());
     }
 }

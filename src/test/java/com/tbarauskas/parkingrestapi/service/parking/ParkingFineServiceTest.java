@@ -2,7 +2,7 @@ package com.tbarauskas.parkingrestapi.service.parking;
 
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
 import com.tbarauskas.parkingrestapi.exceptsion.InvalidArgumentException;
-import com.tbarauskas.parkingrestapi.exceptsion.ParkingRecordHasNotUserException;
+import com.tbarauskas.parkingrestapi.exceptsion.ParkingRecordHasNoUserException;
 import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.repository.ParkingFineRepository;
 import org.junit.jupiter.api.Test;
@@ -107,7 +107,7 @@ class ParkingFineServiceTest {
     void getFinesUser() {
         when(fineRepository.getParkingFineById(1L)).thenReturn(Optional.of(fine));
 
-        assertThrows(ParkingRecordHasNotUserException.class, () -> fineService.getFinesUser(1L));
+        assertThrows(ParkingRecordHasNoUserException.class, () -> fineService.getFinesUser(1L));
     }
 
     @Test

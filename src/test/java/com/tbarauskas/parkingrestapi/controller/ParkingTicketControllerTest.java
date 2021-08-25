@@ -2,8 +2,14 @@ package com.tbarauskas.parkingrestapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tbarauskas.parkingrestapi.dto.parking.ticket.ParkingTicketResponseDTO;
+import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
+import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
+import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.model.Error;
+import com.tbarauskas.parkingrestapi.repository.ParkingTicketRepository;
 import com.tbarauskas.parkingrestapi.repository.UserRepository;
+import com.tbarauskas.parkingrestapi.service.UserService;
+import com.tbarauskas.parkingrestapi.service.parking.ParkingTicketService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,8 +21,10 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDateTime;
 
+import static com.tbarauskas.parkingrestapi.model.ParkingStatusName.UNPAID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -33,6 +41,9 @@ class ParkingTicketControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ParkingTicketService ticketService;
 
     @Test
     @WithUserDetails("Admin")
@@ -110,5 +121,20 @@ class ParkingTicketControllerTest {
 
     @Test
     void deleteTicket() {
+    }
+
+    @Test
+    @WithUserDetails("Saule")
+    void testSetFineStatusPayInsufficientFunds() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(patch("/tickets/pay"))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        User user = userRepository.getUserByUsername("Saule").orElse(null);
+
+        Error error = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Error.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST.value(), error.getStatus());
+        assertEquals("Insufficient funds, your balance after paying ticket would be -3.00", error.getMassage());
     }
 }

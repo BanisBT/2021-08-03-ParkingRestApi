@@ -7,21 +7,16 @@ import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingTicket;
 import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
 import com.tbarauskas.parkingrestapi.entity.user.User;
-import com.tbarauskas.parkingrestapi.entity.user.UserRole;
 import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.exceptsion.UserHasOpenTicketException;
 import com.tbarauskas.parkingrestapi.model.ParkingStatusName;
 import com.tbarauskas.parkingrestapi.repository.ParkingTicketRepository;
-import com.tbarauskas.parkingrestapi.service.UserService;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.tbarauskas.parkingrestapi.model.UserRoleName.MANAGER;
 
 @Service
 public class ParkingTicketService {
@@ -34,15 +29,12 @@ public class ParkingTicketService {
 
     private final ParkingCityService cityService;
 
-    private final UserService userService;
-
     public ParkingTicketService(ParkingTicketRepository ticketRepository, ParkingRecordStatusService statusService,
-                                ParkingZoneService zoneService, ParkingCityService cityService, UserService userService) {
+                                ParkingZoneService zoneService, ParkingCityService cityService) {
         this.ticketRepository = ticketRepository;
         this.statusService = statusService;
         this.zoneService = zoneService;
         this.cityService = cityService;
-        this.userService = userService;
     }
 
     public ParkingTicket getTicket(Long id) {
@@ -66,13 +58,12 @@ public class ParkingTicketService {
         return ticketRepository.getParkingTicketsByParkingBeganBetween(dateFrom, dateTo);
     }
 
-//    TODO retest
     public ParkingTicket createTicket(User user, ParkingTicketRequestCreateDTO fine) {
         ParkingTicket openTicket = getUsersOpenTicket(user);
         ParkingTicket ticket = new ParkingTicket();
 
         if (openTicket == null) {
-            ticket.setUser(userService.getUser(user.getId()));
+            ticket.setUser(user);
             ticket.setParkingCity(cityService.getCity(fine.getParkingCity()));
             ticket.setParkingZone(zoneService.getZone(fine.getParkingZone()));
             ticket.setRecordStatus(statusService.getStatus(ParkingStatusName.OPEN.toString()));
@@ -84,8 +75,7 @@ public class ParkingTicketService {
         }
     }
 
-//    TODO retest
-    public ParkingTicket updateTicket(Long id, User user, ParkingTicketRequestUpdateTDO ticket) {
+    public ParkingTicket updateTicket(Long id, ParkingTicketRequestUpdateTDO ticket) {
         ParkingRecordStatus status = statusService.getStatus(ticket.getRecordStatus());
         ParkingCity city = cityService.getCity(ticket.getParkingCity());
         ParkingZone zone = zoneService.getZone(ticket.getParkingZone());
@@ -97,21 +87,21 @@ public class ParkingTicketService {
         return ticketRepository.save(parkingTicket);
     }
 
-    public void deleteTicket(Long id, User user) {
+    public void deleteTicket(Long id) {
         ticketRepository.deleteById(getTicket(id).getId());
     }
 
-    public User getTicketsUser(Long id, User user) {
+    public User getTicketsUser(Long id) {
         return getTicket(id).getUser();
     }
 
-    public void setTicketsStatus(Long id, User user, String statusName) {
+    public void setTicketsStatus(Long id, String statusName) {
         ParkingTicket ticket = getTicket(id);
         ticket.setRecordStatus(statusService.getStatus(statusName));
         ticketRepository.save(ticket);
     }
 
-    private ParkingTicket getUsersOpenTicket(User user) {
+    public ParkingTicket getUsersOpenTicket(User user) {
         return ticketRepository.getParkingTicketByUserAndRecordStatus(user,
                 statusService.getStatus(ParkingStatusName.OPEN.name())).orElse(null);
     }

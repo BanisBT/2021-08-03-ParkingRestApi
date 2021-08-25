@@ -10,6 +10,7 @@ import com.tbarauskas.parkingrestapi.model.UserRoleName;
 import com.tbarauskas.parkingrestapi.repository.UserRepository;
 import com.tbarauskas.parkingrestapi.service.parking.ParkingFineService;
 import com.tbarauskas.parkingrestapi.service.parking.ParkingRecordStatusService;
+import com.tbarauskas.parkingrestapi.service.parking.ParkingTicketService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,7 +21,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.tbarauskas.parkingrestapi.model.ParkingStatusName.PAID;
 import static com.tbarauskas.parkingrestapi.model.ParkingStatusName.UNPAID;
@@ -38,13 +38,13 @@ public class UserService implements UserDetailsService {
 
     private final ParkingFineService fineService;
 
-    private final ParkingFineService ticketService;
+    private final ParkingTicketService ticketService;
 
     private final FinanceService financeService;
 
     public UserService(UserRepository userRepository, PasswordEncoder encoder, UserRoleService roleService,
                        ParkingRecordStatusService statusService, ParkingFineService fineService,
-                       ParkingFineService ticketService, FinanceService financeService) {
+                       ParkingTicketService ticketService, FinanceService financeService) {
         this.userRepository = userRepository;
         this.encoder = encoder;
         this.roleService = roleService;
@@ -97,30 +97,36 @@ public class UserService implements UserDetailsService {
         return getUser(id).getTickets();
     }
 
-    public void isEnoughMoneyToPayForTicket(User user, ParkingTicket ticket, LocalDateTime endParking) {
-        BigDecimal ticketAmount = financeService.getTicketsAmount(ticket.getParkingZone().getCostPerHour(),
-                ticket.getParkingBegan(), endParking);
+    public void isEnoughMoneyToPayForTicket(User user) {
+        ParkingTicket openTicket = ticketService.getUsersOpenTicket(user);
+
+//        TODO time for testing in real will be LocalTime.now
+        LocalDateTime testingEndTime = openTicket.getParkingBegan().plusHours(1);
+
+        BigDecimal ticketAmount = financeService.getTicketsAmount(openTicket.getParkingZone().getCostPerHour(),
+                openTicket.getParkingBegan(), testingEndTime);
 
         if (user.getBalance().compareTo(ticketAmount) >= 0) {
             user.setBalance(user.getBalance().subtract(ticketAmount));
             updateUser(user.getId(), user);
-            ticketService.setFineStatus(ticket.getId(), PAID.name());
+            ticketService.setTicketsStatus(openTicket.getId(), PAID.name());
         } else {
-            ticketService.setFineStatus(ticket.getId(), UNPAID.name());
+            ticketService.setTicketsStatus(openTicket.getId(), UNPAID.name());
             throw new NotEnoughMoneyToPayForParkingRecordException(user.getBalance().subtract(ticketAmount),
                     getUser(user.getId()));
         }
     }
 
-    public void isEnoughMoneyToPayForFine(User user, ParkingFine parkingFine) {
-        BigDecimal fineAmount = parkingFine.getFineAmount();
+    public void isEnoughMoneyToPayForFine(User user, Long fineId) {
+        ParkingFine fine = fineService.getFine(fineId);
+        BigDecimal fineAmount = fine.getFineAmount();
 
         if (user.getBalance().compareTo(fineAmount) >= 0) {
             user.setBalance(user.getBalance().subtract(fineAmount));
             updateUser(user.getId(), user);
-            fineService.setFineStatus(parkingFine.getId(), PAID.name());
+            fineService.setFineStatus(fine.getId(), PAID.name());
         } else {
-            fineService.setFineStatus(parkingFine.getId(), UNPAID.name());
+            fineService.setFineStatus(fine.getId(), UNPAID.name());
             throw new NotEnoughMoneyToPayForParkingRecordException(user.getBalance().subtract(fineAmount),
                     getUser(user.getId()));
         }

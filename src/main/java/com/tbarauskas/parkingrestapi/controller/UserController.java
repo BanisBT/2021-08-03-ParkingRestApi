@@ -6,10 +6,12 @@ import com.tbarauskas.parkingrestapi.dto.user.UserRequestDTO;
 import com.tbarauskas.parkingrestapi.dto.user.UserResponseDTO;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.service.UserService;
+import com.tbarauskas.parkingrestapi.service.parking.ParkingTicketService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,8 +30,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('MANAGER') || principal.id == #id")
-    public UserResponseDTO getUser(@PathVariable Long id) {
+    @PreAuthorize("hasRole('MANAGER') || principal.id==#id")
+    public UserResponseDTO getUser(@PathVariable Long id, @AuthenticationPrincipal User user) {
         return new UserResponseDTO(userService.getUser(id));
     }
 

@@ -8,9 +8,11 @@ import com.tbarauskas.parkingrestapi.entity.parking.status.ParkingRecordStatus;
 import com.tbarauskas.parkingrestapi.entity.parking.zone.ParkingZone;
 import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.exceptsion.InvalidArgumentException;
-import com.tbarauskas.parkingrestapi.exceptsion.ParkingRecordHasNotUserException;
+import com.tbarauskas.parkingrestapi.exceptsion.ParkingRecordHasNoUserException;
 import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
 import com.tbarauskas.parkingrestapi.repository.ParkingFineRepository;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -39,7 +41,13 @@ public class ParkingFineService {
     }
 
     public ParkingFine getFine(Long id) {
-        return fineRepository.getParkingFineById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ParkingFine fine = fineRepository.getParkingFineById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+
+        if ( user.isManager() || fine.getUser().getId().equals(user.getId()) ) {
+            return fine;
+        }
+        throw new AccessDeniedException("Access denied");
     }
 
     public List<ParkingFine> getFines(LocalDateTime dateFrom, LocalDateTime dateTo) {
@@ -53,7 +61,6 @@ public class ParkingFineService {
         return fineRepository.getParkingFinesByFineDateTimeBetween(dateFrom, dateTo);
     }
 
-//    TODO Retest
     public ParkingFine createFine(User user, ParkingFineRequestCreateDTO fine) {
         LocalDateTime now = LocalDateTime.now();
         ParkingCity city = cityService.getCity(fine.getParkingCity());
@@ -63,7 +70,6 @@ public class ParkingFineService {
         return fineRepository.save(new ParkingFine(user, city, zone, unpaid, now));
     }
 
-//    TODO Retest
     public ParkingFine updateFine(Long id, ParkingFineRequestUpdateDTO fine) {
         ParkingZone zone = zoneService.getZone(fine.getParkingZone());
         ParkingCity city = cityService.getCity(fine.getParkingCity());
@@ -83,7 +89,7 @@ public class ParkingFineService {
     public User getFinesUser(Long id) {
         User user = getFine(id).getUser();
         if (user == null) {
-            throw new ParkingRecordHasNotUserException(id);
+            throw new ParkingRecordHasNoUserException(id);
         } else {
             return user;
         }

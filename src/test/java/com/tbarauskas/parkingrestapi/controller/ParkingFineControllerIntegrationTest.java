@@ -117,20 +117,6 @@ class ParkingFineControllerIntegrationTest {
     }
 
     @Test
-    @WithUserDetails("Admin")
-    void testGetFinesUserThenUserNotExist() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/fines/{id}/user", 5L))
-                .andExpect(status().isNotFound())
-                .andReturn();
-
-        Error error = objectMapper.readValue(mvcResult.getResponse().getContentAsString(),
-                Error.class);
-
-        assertEquals(HttpStatus.NOT_FOUND.value(), error.getStatus());
-        assertEquals("Parking record don't has user", error.getMassage());
-    }
-
-    @Test
     @WithUserDetails("Maxima")
     void testGetFinesUserNotManager() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/fines/{id}/user", 1L))

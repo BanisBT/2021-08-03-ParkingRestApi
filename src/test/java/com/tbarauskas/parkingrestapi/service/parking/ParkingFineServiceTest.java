@@ -1,6 +1,7 @@
 package com.tbarauskas.parkingrestapi.service.parking;
 
 import com.tbarauskas.parkingrestapi.entity.parking.record.ParkingFine;
+import com.tbarauskas.parkingrestapi.entity.user.User;
 import com.tbarauskas.parkingrestapi.exceptsion.InvalidArgumentException;
 import com.tbarauskas.parkingrestapi.exceptsion.ParkingRecordHasNoUserException;
 import com.tbarauskas.parkingrestapi.exceptsion.ResourceNotFoundException;
@@ -10,6 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,6 +28,15 @@ import static org.mockito.Mockito.*;
 class ParkingFineServiceTest {
 
     @Mock
+    private User user;
+
+    @Mock
+    private Authentication authentication;
+
+    @Mock
+    private SecurityContext securityContext;
+
+    @Mock
     private ParkingFineRepository fineRepository;
 
     @Mock
@@ -33,8 +46,28 @@ class ParkingFineServiceTest {
     private ParkingFineService fineService;
 
     @Test
-    void testGetFine() {
+    void testGetFineByOwner() {
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
         when(fineRepository.getParkingFineById(1L)).thenReturn(Optional.of(fine));
+        when(fine.getUser()).thenReturn(user);
+        when(user.getId()).thenReturn(1L);
+
+        ParkingFine parkingFine = fineService.getFine(1L);
+
+        assertEquals(fine, parkingFine);
+    }
+
+    @Test
+    void testGetFineByManager() {
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
+        when(fineRepository.getParkingFineById(1L)).thenReturn(Optional.of(fine));
+        when(user.isManager()).thenReturn(true);
 
         ParkingFine parkingFine = fineService.getFine(1L);
 
@@ -43,6 +76,10 @@ class ParkingFineServiceTest {
 
     @Test
     void testGetFineThenNotExist() {
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
         when(fineRepository.getParkingFineById(any(long.class))).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> fineService.getFine(101L));
@@ -94,6 +131,11 @@ class ParkingFineServiceTest {
 
     @Test
     void testDeleteFine() {
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
+        when(user.isManager()).thenReturn(true);
         when(fineRepository.getParkingFineById(1L)).thenReturn(Optional.of(fine));
 
         fineService.deleteFine(1L);
@@ -102,7 +144,6 @@ class ParkingFineServiceTest {
         verify(fineRepository, times(1)).deleteById(fine.getId());
     }
 
-//    TODO kaip?
     @Test
     void getFinesUser() {
         when(fineRepository.getParkingFineById(1L)).thenReturn(Optional.of(fine));
@@ -116,8 +157,13 @@ class ParkingFineServiceTest {
 
     @Test
     void testSetFineAmount() {
+        SecurityContextHolder.setContext(securityContext);
         BigDecimal newAmount = BigDecimal.valueOf(10);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
         when(fineRepository.getParkingFineById(1L)).thenReturn(Optional.of(fine));
+        when(user.isManager()).thenReturn(true);
 
         fineService.setFineAmount(1L, newAmount);
 

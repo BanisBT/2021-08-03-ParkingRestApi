@@ -170,7 +170,36 @@
 					"response": []
 				},
 				{
-					"name": "setParkingFineStatusPayFineSucceffuly",
+					"name": "setParkingFineStatusPayFineNotSucceffuly",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJwYXJraW5nLWFwaSIsImF1ZCI6InBhcmtpbmctdWkiLCJzdWIiOiJCYW5pcyIsImV4cCI6MTYyOTkwMzkxMywiaWF0IjoxNjI5ODk3OTEzLCJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6IkJhbmlzIiwibmFtZSI6IlRvbWFzIiwic3VybmFtZSI6IkJhcmF1c2thcyIsImNhck51bWJlciI6IlhYWCA3NzciLCJyb2xlcyI6W3siaWQiOjEsInVzZXJSb2xlIjoiUkVHVUxBUiIsImNyZWF0ZWQiOm51bGwsInVwZGF0ZWQiOm51bGwsImF1dGhvcml0eSI6IlJPTEVfUkVHVUxBUiJ9XX19.A9mKlq3km2czkfb2oR3OLVGviJThrm3Ka-gCuiPb0yezqzMxspPBE651sY-DdywJ-rKwTZhJ64RACWyD8-q3hg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/fines/2/pay",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"fines",
+								"2",
+								"pay"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "setParkingFineStatusPayFineSucceffuly Copy",
 					"request": {
 						"auth": {
 							"type": "bearer",

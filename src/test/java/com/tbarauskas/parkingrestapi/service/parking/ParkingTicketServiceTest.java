@@ -78,7 +78,7 @@ class ParkingTicketServiceTest {
 
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
-        when(ticketRepository.getParkingTicketById(anyLong())).thenReturn(Optional.empty());
+        when(ticketRepository.getParkingTicketById(100L)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> ticketService.getTicket(100L));
     }

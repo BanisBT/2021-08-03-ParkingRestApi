@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-//TODO paklausit kuo susijusi si klase su getFine is controller?!?!?
 @Data
 @NoArgsConstructor
 public class ParkingFineResponseDTO {

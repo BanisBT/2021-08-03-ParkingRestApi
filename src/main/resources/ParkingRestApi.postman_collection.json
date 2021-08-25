@@ -90,7 +90,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJwYXJraW5nLWFwaSIsImF1ZCI6InBhcmtpbmctdWkiLCJzdWIiOiJCYW5pcyIsImV4cCI6MTYyOTYzMDQ2NywiaWF0IjoxNjI5NjI0NDY3LCJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6IkJhbmlzIiwibmFtZSI6IlRvbWFzIiwic3VybmFtZSI6IkJhcmF1c2thcyIsImNhck51bWJlciI6IlhYWCA3NzciLCJyb2xlcyI6W3siaWQiOjEsInVzZXJSb2xlIjoiUkVHVUxBUiIsImNyZWF0ZWQiOm51bGwsInVwZGF0ZWQiOm51bGwsImF1dGhvcml0eSI6IlJPTEVfUkVHVUxBUiJ9XX19.gdgdtGyDygeynKrVWktTGhwd1kQ9cKecoal2pvvoO_5bS8krW088WyZKBKharxfb9bvH7IBFcqlY_BlCfSK1Lw",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJwYXJraW5nLWFwaSIsImF1ZCI6InBhcmtpbmctdWkiLCJzdWIiOiJBZG1pbiIsImV4cCI6MTYyOTkwMDM5MywiaWF0IjoxNjI5ODk0MzkzLCJ1c2VyIjp7ImlkIjozLCJ1c2VybmFtZSI6IkFkbWluIiwibmFtZSI6IkFkbWluIiwic3VybmFtZSI6IkFkbWluIiwiY2FyTnVtYmVyIjoiWCIsInJvbGVzIjpbeyJpZCI6MiwidXNlclJvbGUiOiJNQU5BR0VSIiwiY3JlYXRlZCI6bnVsbCwidXBkYXRlZCI6bnVsbCwiYXV0aG9yaXR5IjoiUk9MRV9NQU5BR0VSIn0seyJpZCI6MSwidXNlclJvbGUiOiJSRUdVTEFSIiwiY3JlYXRlZCI6bnVsbCwidXBkYXRlZCI6bnVsbCwiYXV0aG9yaXR5IjoiUk9MRV9SRUdVTEFSIn1dfX0.2nUHqo3sdvSmShi1VtKipMGCidQlKMlEbwq16o1KwxtTnmDy5ReqPXllYl1pJA0-WKf73FoX8kPTK7y_bUIoig",
 									"type": "string"
 								}
 							]
@@ -116,6 +116,35 @@
 					"response": []
 				},
 				{
+					"name": "getParkingFinesUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJwYXJraW5nLWFwaSIsImF1ZCI6InBhcmtpbmctdWkiLCJzdWIiOiJBZG1pbiIsImV4cCI6MTYyOTkwMDM5MywiaWF0IjoxNjI5ODk0MzkzLCJ1c2VyIjp7ImlkIjozLCJ1c2VybmFtZSI6IkFkbWluIiwibmFtZSI6IkFkbWluIiwic3VybmFtZSI6IkFkbWluIiwiY2FyTnVtYmVyIjoiWCIsInJvbGVzIjpbeyJpZCI6MiwidXNlclJvbGUiOiJNQU5BR0VSIiwiY3JlYXRlZCI6bnVsbCwidXBkYXRlZCI6bnVsbCwiYXV0aG9yaXR5IjoiUk9MRV9NQU5BR0VSIn0seyJpZCI6MSwidXNlclJvbGUiOiJSRUdVTEFSIiwiY3JlYXRlZCI6bnVsbCwidXBkYXRlZCI6bnVsbCwiYXV0aG9yaXR5IjoiUk9MRV9SRUdVTEFSIn1dfX0.2nUHqo3sdvSmShi1VtKipMGCidQlKMlEbwq16o1KwxtTnmDy5ReqPXllYl1pJA0-WKf73FoX8kPTK7y_bUIoig",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/fines/1/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"fines",
+								"1",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "setParkingFineStatus",
 					"request": {
 						"method": "PATCH",
@@ -135,6 +164,35 @@
 								"1",
 								"setStatus",
 								"OPEN"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "setParkingFineStatusPayFineSucceffuly",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJwYXJraW5nLWFwaSIsImF1ZCI6InBhcmtpbmctdWkiLCJzdWIiOiJCYW5pcyIsImV4cCI6MTYyOTkwMjg2NSwiaWF0IjoxNjI5ODk2ODY1LCJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6IkJhbmlzIiwibmFtZSI6IlRvbWFzIiwic3VybmFtZSI6IkJhcmF1c2thcyIsImNhck51bWJlciI6IlhYWCA3NzciLCJyb2xlcyI6W3siaWQiOjEsInVzZXJSb2xlIjoiUkVHVUxBUiIsImNyZWF0ZWQiOm51bGwsInVwZGF0ZWQiOm51bGwsImF1dGhvcml0eSI6IlJPTEVfUkVHVUxBUiJ9XX19.oPFP8zZ9UQzrGAJlaoZFE_GOZBsdoFELRq0fMA6UAbZtRp4Qy6FbJ6h21YxRGRDX_3MQyGtB7xseH7AFgCiajg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/fines/1/pay",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"fines",
+								"1",
+								"pay"
 							]
 						}
 					},
@@ -196,18 +254,23 @@
 				{
 					"name": "getParkingFines",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJwYXJraW5nLWFwaSIsImF1ZCI6InBhcmtpbmctdWkiLCJzdWIiOiJBZG1pbiIsImV4cCI6MTYyOTkwMTg1MiwiaWF0IjoxNjI5ODk1ODUyLCJ1c2VyIjp7ImlkIjozLCJ1c2VybmFtZSI6IkFkbWluIiwibmFtZSI6IkFkbWluIiwic3VybmFtZSI6IkFkbWluIiwiY2FyTnVtYmVyIjoiWCIsInJvbGVzIjpbeyJpZCI6MiwidXNlclJvbGUiOiJNQU5BR0VSIiwiY3JlYXRlZCI6bnVsbCwidXBkYXRlZCI6bnVsbCwiYXV0aG9yaXR5IjoiUk9MRV9NQU5BR0VSIn0seyJpZCI6MSwidXNlclJvbGUiOiJSRUdVTEFSIiwiY3JlYXRlZCI6bnVsbCwidXBkYXRlZCI6bnVsbCwiYXV0aG9yaXR5IjoiUk9MRV9SRUdVTEFSIn1dfX0.FrJdzAA2L-ZJVfmmOAughJnNrogFoDZazfSz1-k-4Pxvz_ktWaFVPiXrNGlmf55kx1oZnkzyIcYCkn71Bdf6_A",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:8080/fines",
-							"protocol": "http",
+							"raw": "{{url}}/fines",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{url}}"
 							],
-							"port": "8080",
 							"path": [
 								"fines"
 							]
@@ -436,8 +499,18 @@
 					"response": []
 				},
 				{
-					"name": "getParkingTickets",
+					"name": "getParkingTicketsWithOneParam",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJwYXJraW5nLWFwaSIsImF1ZCI6InBhcmtpbmctdWkiLCJzdWIiOiJBZG1pbiIsImV4cCI6MTYyOTkwMTg1MiwiaWF0IjoxNjI5ODk1ODUyLCJ1c2VyIjp7ImlkIjozLCJ1c2VybmFtZSI6IkFkbWluIiwibmFtZSI6IkFkbWluIiwic3VybmFtZSI6IkFkbWluIiwiY2FyTnVtYmVyIjoiWCIsInJvbGVzIjpbeyJpZCI6MiwidXNlclJvbGUiOiJNQU5BR0VSIiwiY3JlYXRlZCI6bnVsbCwidXBkYXRlZCI6bnVsbCwiYXV0aG9yaXR5IjoiUk9MRV9NQU5BR0VSIn0seyJpZCI6MSwidXNlclJvbGUiOiJSRUdVTEFSIiwiY3JlYXRlZCI6bnVsbCwidXBkYXRlZCI6bnVsbCwiYXV0aG9yaXR5IjoiUk9MRV9SRUdVTEFSIn1dfX0.FrJdzAA2L-ZJVfmmOAughJnNrogFoDZazfSz1-k-4Pxvz_ktWaFVPiXrNGlmf55kx1oZnkzyIcYCkn71Bdf6_A",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -610,6 +683,27 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"username\":\"Banis\",\n    \"password\":\"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LoginAdmin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"Admin\",\n    \"password\":\"123456\"\n}"
 						},
 						"url": {
 							"raw": "{{url}}/login",

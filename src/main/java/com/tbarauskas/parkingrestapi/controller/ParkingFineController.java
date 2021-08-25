@@ -78,8 +78,9 @@ public class ParkingFineController {
 
     @PatchMapping("/{id}/pay")
     public void setFineStatusPay(@PathVariable Long id, @AuthenticationPrincipal User user) {
+        User userFromDb = userService.getUser(user.getId());
         log.debug("User - {} try to pay for parking fine - {}", user, fineService.getFine(id));
-        userService.isEnoughMoneyToPayForFine(user, id);
+        userService.isEnoughMoneyToPayForFine(userFromDb, id);
 
     }
 
